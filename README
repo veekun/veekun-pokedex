@@ -1,3 +1,15 @@
+veekun_pokedex
+==============
+
 This is a port of spline-pokedex to Pyramid, but without the spline baggage.
 
 It may or may not succeed.  Let's see what happens.  :)
+
+Getting Started
+---------------
+
+- cd <directory containing this file>
+
+- $venv/bin/python setup.py develop
+
+- $venv/bin/pserve development.ini
