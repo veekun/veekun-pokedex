@@ -1,7 +1,323 @@
+@import "archetype/lib/css3";
+
+body {
+    font-size: 13px;
+    font-family: sans-serif;
+    background: url(/images/noise2.png) hsl(0, 0%, 30%);
+    background-image:
+        url(/images/eevees-left.png),
+        url(/images/eevees-right.png),
+        url(/images/noise2.png);
+    background-repeat:
+        repeat-y,
+        repeat-y,
+        repeat;
+    background-position:
+        top left,
+        top right,
+        top left;
+}
+
+#logo { display: none; } // XXX
 #header {
-    background: gold;
+    color: white;
+    background: hsl(225, 50%, 60%);
+}
+#nav {
+    // Put the box-shadow above the subnav
+    position: relative;
+    z-index: 1;
+
+    font-size: 1.33em;
+    background: hsl(225, 50%, 40%);
+    background: -moz-linear-gradient(top,
+        hsl(225, 50%, 37%),
+        hsl(225, 50%, 30%)
+    );
+    box-shadow: 0 1px 3px hsla(black, 0.5);
+
+    > ul.menubar {
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        li {
+            display: inline-block;
+            padding: 0.33em;
+        }
+    }
+}
+
+#subnav {
+    position: relative;
+    height: 48px;  // TODO make this all more flexibly heighted
+    background: hsl(36, 20%, 90%);
+
+    .eyeball-crop {
+        display: inline-block;
+        overflow: hidden;
+        height: 48px;
+        width: 96px;
+        vertical-align: bottom;
+
+        img {
+            margin: -24px 0 -24px;
+        }
+    }
+
+    .portrait {
+        .eyeball-crop {
+            float: left;
+        }
+
+        // NOTE: These font sizes are in pixels to match the height of the
+        // eyeball-crop, 48px
+        .-desc {
+            font-size: 12px;
+            line-height: 16px;
+        }
+        .name {
+            font-size: 32px;
+            line-height: 48px;
+            font-weight: bold;
+            color: hsl(225, 30%, 40%);
+        }
+    }
+
+    .subsections {
+        display: none;
+        position: absolute;  // TODO floats instead?
+        bottom: 0;
+        left: 24em;
+
+        border: 1px solid hsl(36, 20%, 80%);
+
+        > li {
+            float: left;
+            margin: 1px;
+
+            > a,
+            > .-selected {
+                display: block;
+                padding: 0.33em 1em;
+            }
+            > a {
+            }
+            > .-selected {
+                background: white;
+                background: hsl(36, 20%, 80%);
+            }
+        }
+    }
+
+    .prev-next {
+        position: absolute;
+        top: 0;
+        right: 4em;
+
+        > li {
+            display: inline-block;
+            position: relative;
+            width: 11em;
+            line-height: 1;
+            background: hsl(36, 20%, 70%);
+
+            a {
+                display: block;
+                height: 100%;
+            }
+
+            .name {
+                position: absolute;
+                z-index: 1;
+                font-size: 1.5em;
+                font-weight: bold;
+                color: white;
+                text-shadow: 1px 1px 1px black;
+
+                color: white;
+                // TODO nice mixin here
+                text-shadow: 0 1px 0 black, 0 -1px 0 black, 1px 0 0 black, -1px 0 0 black;
+            }
+
+            .eyeball-crop {
+                opacity: 0.4;
+            }
+        }
+
+        > li.prev {
+            text-align: right;
+
+            .name {
+                left: 0;
+                top: 0.33em;
+            }
+            .wedge {
+                position: absolute;
+                top: 0;
+                left: -24px;
+                border-style: solid;
+                border-width: 24px 24px 24px 0;
+                border-color: transparent hsl(36, 20%, 70%);
+            }
+        }
+
+        > li.next {
+            margin-left: 1em;
+
+            .name {
+                right: 0;
+                bottom: 0.33em;
+            }
+            .wedge {
+                position: absolute;
+                top: 0;
+                right: -24px;
+                border-style: solid;
+                border-width: 24px 0 24px 24px;
+                border-color: transparent hsl(36, 20%, 70%);
+            }
+        }
+
+        > li {
+            @include transition(background-color 0.2s linear);
+            .wedge {
+                @include transition(border-color 0.2s linear);
+            }
+            .eyeball-crop {
+                @include transition(opacity 0.2s linear);
+            }
+        }
+        > li:hover {
+            background-color: hsl(36, 20%, 60%);
+            .wedge {
+                border-color: transparent hsl(36, 20%, 60%);
+            }
+            .eyeball-crop {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+#breadcrumbs {
+    background: white;
+    background: -moz-linear-gradient(top, white, #ececec);
+    background: hsl(36, 20%, 95%);
+    border-bottom: 1px solid #ddd;
+    padding: 0.33em 2em;
+    overflow-y: hidden;  // for cropped icons
+
+    li {
+        display: inline-block;
+
+        & + li:before {
+            content: " » ";
+            padding: 0 0.33em;
+        }
+    }
+
+    // These are menu sprites; crop to an eyeball like with main sprites
+    img {
+        margin: -16px 0 -4px;
+        vertical-align: middle;
+    }
+}
+
+#body {
+    margin: 1em 3em;
+
+    > section {
+        margin-bottom: 2em;
+    }
+}
+
+h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #222;
+    padding: 0.33em;
+    margin: 0 0 0.67em;
+
+    background: hsl(225, 70%, 90%);
+    background: url(http://veekun.com/dex/media/items/great-ball.png) hsl(225, 50%, 60%) right center no-repeat;
+    background-size: auto 100%;
+    border: 1px solid hsl(225, 50%, 50%);
+    border-left-width: 3px;
+    color: hsl(225, 50%, 95%);
+    border-radius: 0 2em 2em 0;
+    text-shadow: 1px 1px 1px hsl(225, 20%, 20%);
+
+    box-shadow: 1px 1px 2px hsl(0, 0%, 50%);
+
+    &:target {
+        background-color: hsl(270, 50%, 60%);
+        background-image: url(http://veekun.com/dex/media/items/master-ball.png);
+        border-color: hsl(270, 50%, 50%);
+        color: hsl(270, 20%, 95%);
+        text-shadow: 1px 1px 1px hsl(270, 20%, 20%);
+    }
+}
+
+h2 {
+    font-size: 133%;
+    font-weight: bold;
+    margin-bottom: 0.75em;
+
+    color: hsl(225, 50%, 60%);
+    text-shadow: 1px 1px 1px hsl(225, 50%, 90%);
+    box-shadow: inset 0 -2px 0 hsl(225, 50%, 90%);
+}
+
+// XXX split most of this into a mixin
+a {
+    color: hsl(225, 90%, 50%);
+    @include transition(color linear 0.2s);
+
+    &:visited {
+        color: hsl(270, 90%, 50%);
+    }
+    &:hover,
+    &:active {
+        color: hsl(0, 90%, 50%);
+    }
+}
+
+section {
+    margin-bottom: 1em;
+}
+
+section > header {
+    margin-bottom: 1em;
+
+    h1 {
+        position: relative;
+        z-index: 1;  // keep drop shadow above the doorhanger
+
+        margin-bottom: 0;
+    }
+
+    h1 + .doorhanger {
+        margin: 0 3em 0 1em;
+        padding: 0.5em;
+        border: 1px solid hsl(225, 50%, 70%);
+        border-top: none;
+        border-radius: 0 0 0.5em 0.5em;
+
+        background: hsl(225, 50%, 90%);
+    }
+    h1:target + .doorhanger {
+        border-color: hsl(270, 50%, 50%);
+        background: hsl(270, 50%, 90%);
+    }
 }
 
 #footer {
-    background: gray;
+    padding: 1em;
+    background: hsl(0, 0%, 90%);
+    color: hsl(0, 0%, 40%);
+}
+
+dt {
+    color: hsl(36, 20%, 48%) !important;
 }

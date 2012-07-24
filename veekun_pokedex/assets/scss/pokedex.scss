@@ -1,0 +1,172 @@
+// Stuff common to various Pokédex pages
+
+@import "archetype/lib/css3";
+
+.page-portrait {
+    height: 96px;
+    width: 96px;
+    padding: 6px;  // border radius plus box-shadow
+
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px #ddd;
+}
+
+.microbar {
+    display: inline-block;
+    height: 0.33em;
+    width: 8em;
+    margin: 0.5em;
+    vertical-align: middle;
+    background: hsl(0, 0%, 90%);
+
+    > .microbar-bar {
+        height: 100%;
+        background: hsl(36, 30%, 70%);
+    }
+}
+
+
+////// TABLES
+table.table-pretty {
+    > tbody {
+        > tr {
+            &.header {
+                background: green;
+            }
+
+            &:nth-child(2n) {
+                background: lightgray;
+            }
+        }
+
+    }
+
+}
+
+////// VERSIONS
+[class^='version-'],
+[class*=' version-'] {
+    display: inline-block;
+    //font-size: 133%;
+    /*
+    height: 1.25em;
+    min-width: 1.25em;
+    line-height: 1.25em;
+    */
+    padding: 0.17em 0.25em;
+    line-height: 1;
+    text-align: center;
+    font-family: monospace;
+
+    font-weight: bold;
+    color: white;
+    background: #999;  // override me!
+    text-shadow: 0 0 1px black;
+}
+// Gen 1
+.version-red {
+    background: hsl(0, 100%, 40%);
+}
+.version-blue {
+    background: hsl(240, 100%, 40%);
+}
+.version-yellow {
+    background: hsl(60, 100%, 40%);
+}
+// Gen 2
+.version-gold {
+    background: hsl(60, 100%, 40%);
+}
+.version-silver {
+    background: hsl(0, 0%, 40%);
+}
+.version-crystal {
+    background: hsl(240, 100%, 70%);
+}
+// Gen 3
+.version-ruby {
+    background: hsl(0, 90%, 60%);
+}
+.version-sapphire {
+    background: hsl(240, 90%, 60%);
+}
+.version-emerald {
+    background: hsl(120, 90%, 40%);
+}
+.version-fire-red {
+    background: hsl(0, 100%, 40%);
+}
+.version-leaf-green {
+    background: hsl(120, 100%, 30%);
+}
+// Gen 4
+.version-diamond {
+    background: hsl(240, 90%, 80%);
+    text-shadow: 0 0 2px hsl(240, 90%, 40%);
+}
+.version-pearl {
+    background: hsl(0, 90%, 80%);
+}
+.version-platinum {
+    background: hsl(0, 0%, 80%);
+}
+.version-heart-gold {
+    background: hsl(60, 100%, 40%);
+}
+.version-soul-silver {
+    background: hsl(0, 0%, 40%);
+}
+// Gen 5
+.version-black {
+    background: #404040;
+    text-shadow: 0 0 4px black;
+}
+.version-white {
+    color: black;
+    background: #c0c0c0;
+    text-shadow: 0 0 4px white;
+}
+.version-black2 {
+    background: #404040;
+    text-shadow: 0 0 4px black;
+}
+.version-white2 {
+    color: black;
+    background: #c0c0c0;
+    text-shadow: 0 0 4px white;
+}
+// Other
+.version-colosseum {
+    background: hsl(270, 50%, 50%);
+}
+.version-xd {
+    background: hsl(270, 50%, 50%);
+}
+
+
+// XXX this is gross ok
+// Type icons should align their own text approximately to the baseline
+img[src*="/types/"] {
+    vertical-align: -3px;
+}
+
+
+////// GENDER
+@mixin gender-background($boy-pct) {
+    $boy: hsl(240, 40%, 60%);
+    $girl: hsl(300, 40%, 60%);
+    background-image: -moz-linear-gradient(left, $boy, $boy $boy-pct, $girl $boy-pct, $girl);
+}
+.gender-bar {
+    //font-size: 90%;
+    width: 12em;
+    text-align: center;
+    color: white;
+    background: #ddd;
+    border: 1px solid #ccc;
+
+    &[data-male="7"] {
+        @include gender-background(100% * 7/8);
+    }
+}

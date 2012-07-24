@@ -1,0 +1,170 @@
+// Stuff specific to Pokémon pages
+
+// TODO move me when done
+table.standard-table {
+    border-collapse: collapse;
+
+    td, th {
+        padding: 0.33em;
+    }
+
+    th {
+        color: hsl(36, 20%, 48%);
+    }
+}
+
+table.pokemon-stats {
+    width: auto;
+
+    th {
+        text-align: right;
+    }
+
+    .statsbar {
+        position: relative;
+        font-size: 80%;
+        width: 20em;
+        background: #f4f4f4;
+        box-shadow: inset 0 0 0 1px #e8e8e8;
+
+        .statsbar-bar {
+            line-height: 1.5;
+            padding-left: 0.5em;
+            -moz-box-sizing: border-box;
+            white-space: nowrap;
+            background: hsl(36, 70%, 70%);
+        }
+    }
+}
+
+table.pokemon-evolution-chart {
+    width: 100%;
+    table-layout: fixed;
+
+    border-collapse: separate;
+    border-spacing: 0.33em;
+
+    color: #222;
+
+    td {
+        overflow: hidden;
+        padding: 0;
+
+        // Move the padding onto the wrapper div, so the sprite can touch the
+        // cell's edge
+        > .td-absolute-wrapper {
+            min-height: 48px; // height of sprite wrapper
+            padding: 0.5em;
+        }
+
+        background-color: hsl(36, 0%, 96%);
+        -moz-transition: background-color linear 0.2s;
+    }
+    xxxtd.-selected {
+        // Border has to be on the cell, since the div may not fill its full
+        // height.  Take half of the div's padding for the border
+        border: 0.25em solid hsl(36, 30%, 70%);
+
+        > .td-absolute-wrapper {
+            padding: 0.25em;
+        }
+        .-sprite-wrapper {
+            right: -0.25em;
+            bottom: -0.25em;
+        }
+    }
+
+    td.-selected {
+        background-color: hsl(36, 20%, 90%);
+    }
+
+
+    p.-pokemon {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 0;
+    }
+    ul.-method {
+        // This avoids text on top of /most of/ the portraits, without wrapping
+        // too hard on smaller screens
+        margin-right: 48px;
+
+        > li {
+            margin: 0.25em 0 0.25em 1em;
+
+            &:before {
+                content: "» ";
+                display: block;
+                float: left;
+                margin-left: -1em;
+            }
+        }
+    }
+
+    // TODO use a wrapper div (ugh!) and fix this nonsense with abs positioning
+    .-sprite-wrapper {
+        position: absolute;
+        height: 48px;
+        width: 80px;
+        right: 0;
+        bottom: 0;
+
+        img {
+            margin: -16px -16px -32px 0;
+
+            opacity: 0.6;
+            -moz-transition: opacity linear 0.2s;
+        }
+    }
+
+    td.-selected img {
+        opacity: 1;
+    }
+    td:hover {
+        background-color: hsl(36, 20%, 93%);
+    }
+    td:hover img {
+        opacity: 1;
+    }
+
+    td.-empty,
+    td.-empty:hover {
+        background-color: hsl(36, 0%, 96%);
+    }
+}
+
+
+
+// TODO this can probably go in archetype
+.td-absolute-wrapper {
+    position: relative;
+    height: 100%;
+}
+
+
+
+
+.sprite-multiplexer {
+    position: relative;
+    display: inline-block;
+
+    img {
+        display: block;
+        background: white;
+
+        opacity: 1;
+
+        -moz-transition: opacity 0.5s linear;
+    }
+    img + img {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .multiplex-normal & img.sprite-shiny,
+    .multiplex-male & img.sprite-female {
+        // TODO fix this to display-none blah blah
+        opacity: 0;
+    }
+}

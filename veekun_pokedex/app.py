@@ -43,6 +43,8 @@ def main(global_config, **settings):
     config.add_route('main', '/')
     config.scan()
 
+    config.add_static_view('images', 'veekun_pokedex:assets/images')
+
     # PySCSS support
     config.include('pyramid_scss')
     config.add_route('pyscss', '/css/{css_path:[^/]+}.css')
