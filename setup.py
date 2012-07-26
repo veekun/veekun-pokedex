@@ -15,32 +15,32 @@ requires = [
     'pyramid_pyscss',
     'zope.sqlalchemy',
     'waitress',
-    ]
+]
 
 setup(name='veekun_pokedex',
-      version='0.0',
-      description='veekun_pokedex',
-      long_description=README + '\n\n' +  CHANGES,
-      classifiers=[
+    version='0.0',
+    description='veekun_pokedex',
+    long_description=README + '\n\n' +  CHANGES,
+    classifiers=[
         "Programming Language :: Python",
         "Framework :: Pylons",
         "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        ],
-      author='',
-      author_email='',
-      url='',
-      keywords='web wsgi bfg pylons pyramid',
-      packages=find_packages(),
-      include_package_data=True,
-      zip_safe=False,
-      test_suite='veekun_pokedex',
-      install_requires=requires,
-      entry_points="""\
-      [paste.app_factory]
-      main = veekun_pokedex.app:main
-      [console_scripts]
-      populate_veekun_pokedex = veekun_pokedex.scripts.populate:main
-      """,
-      )
+    ],
+    author='',
+    author_email='',
+    url='',
+    keywords='web wsgi bfg pylons pyramid',
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False,
+    test_suite='veekun_pokedex',
+    install_requires=requires,
+    entry_points="""\
+        [paste.app_factory]
+        main = veekun_pokedex.app:main
+        [console_scripts]
+        populate_veekun_pokedex = veekun_pokedex.scripts.populate:main
+    """,
+)
 
