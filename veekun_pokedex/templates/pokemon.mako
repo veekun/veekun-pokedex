@@ -1,4 +1,6 @@
 <%inherit file="/_base.mako"/>
+<%namespace name="lib" file="/_lib.mako"/>
+<% from veekun_pokedex.lib import formatting %>
 
 <%block name="title">${pokemon.name} [Pokemon #${pokemon.id}] - veekun</%block>
 
@@ -6,7 +8,7 @@
 <%block name="subnav">
 <nav id="subnav">
     <div class="portrait">
-        <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.id}.png"></div>
+        <div class="eyeball-crop">${lib.pokemon_sprite(pokemon.species)}</div>
         <div class="name">${pokemon.name}</div>
     </div>
     <ul class="subsections">
@@ -340,124 +342,52 @@
     <table class="standard-table pokemon-evolution-chart">
         <thead>
             <tr>
-                <th>Baby</th>
-                <th>Basic</th>
-                <th>Stage 1</th>
-                <th>Stage 2</th>
+                <th>${_(u'Baby')}</th>
+                <th>${_(u'Basic')}</th>
+                <th>${_(u'Stage 1')}</th>
+                <th>${_(u'Stage 2')}</th>
             </tr>
         </thead>
         <tbody>
+            % for row in evolution_table:
             <tr>
-                <td rowspan="7" class="-empty"></td>
-                <td rowspan="7" class="-selected">
+              % for col in row:
+              % if col == '':
+                <td class="-empty"></td>
+              % elif col != None:
+                <td rowspan="${col['span']}"
+                    % if col['species'] == pokemon.species:
+                        class="-selected"\
+                    % endif
+                >
                 <div class="td-absolute-wrapper">
                     <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.id}.png">
+                        ${lib.pokemon_sprite(col['species'])}
                     </div>
                     <p class="-pokemon">
-                        Eevee
-                    </p>
-                </div>
-                </td>
-                <td>
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/134.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/vaporeon">Vaporeon</a>
+                      % if col['species'] == pokemon.species:
+                        ${col['species'].name}
+                      % else:
+                        <a href="/pokemon/XXX">${col['species'].name}</a>
+                      % endif
                     </p>
                     <ul class="-method">
-                        <li>Use a <a href="...">Water Stone</a></li>
+                        % for evolution in col['species'].evolutions:
+                        <li>${formatting.evolution_description(evolution)}</li>
+                        % endfor
+                        % if col['species'].is_baby and pokemon.species.evolution_chain.baby_trigger_item:
+                        <li>
+                            ${_(u"Either parent must hold ")} {h.pokedex.item_link(pokemon.species.evolution_chain.baby_trigger_item, include_icon=False, _=_)}
+                        </li>
+                        % endif
                     </ul>
                 </div>
                 </td>
-                <td rowspan="7" class="-empty"></td>
+              % endif
+              % endfor
             </tr>
-            <tr>
-                <td>
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/135.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/jolteon">Jolteon</a>
-                    </p>
-                    <ul class="-method"><li>Use a <a href="...">Thunderstone</a></li></ul>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/136.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/jolteon">Flareon</a>
-                    </p>
-                    <ul class="-method"><li>Use a <a href="...">Fire Stone</a></li></ul>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/196.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/jolteon">Espeon</a>
-                    </p>
-                    <ul class="-method"><li>Level up during the day, while <a href="...">happy</a></li></ul>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/197.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/jolteon">Umbreon</a>
-                    </p>
-                    <ul class="-method"><li>Level up during the night, while <a href="...">happy</a></li></ul>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/470.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/jolteon">Leafeon</a>
-                    </p>
-                    <ul class="-method">
-                        <li>Level up within <a href="...">Eterna Forest</a></li>
-                        <li>Level up within <a href="...">Other Forest</a></li>
-                    </ul>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="-two">
-                <div class="td-absolute-wrapper">
-                    <div class="-sprite-wrapper">
-                        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/471.png">
-                    </div>
-                    <p class="-pokemon">
-                        <a href="/dex/pokemon/jolteon">Glaceon</a>
-                    </p>
-                    <ul class="-method">
-                        <li>Level up within <a href="...">Ice Place</a></li>
-                        <li>Level up within <a href="...">Ice Place 2</a></li>
-                    </ul>
-                </div>
-                </td>
-            </tr>
+            % endfor
+        </tbody>
     </table>
 </section>
 
