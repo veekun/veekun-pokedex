@@ -351,31 +351,33 @@
         <tbody>
             % for row in evolution_table:
             <tr>
-              % for col in row:
-              % if col == '':
-                <td class="-empty"></td>
-              % elif col != None:
-                <td rowspan="${col['span']}"
-                    % if col['species'] == pokemon.species:
+              % for cell in row:
+              % if cell is None:
+                <% pass %>
+              % elif cell.is_empty:
+                <td class="-empty" rowspan="${cell.rowspan}"></td>
+              % else:
+                <td rowspan="${cell.rowspan}"
+                    % if cell.species == pokemon.species:
                         class="-selected"\
                     % endif
                 >
                 <div class="td-absolute-wrapper">
                     <div class="-sprite-wrapper">
-                        ${lib.pokemon_sprite(col['species'])}
+                        ${lib.pokemon_sprite(cell.species)}
                     </div>
                     <p class="-pokemon">
-                      % if col['species'] == pokemon.species:
-                        ${col['species'].name}
+                      % if cell.species == pokemon.species:
+                        ${cell.species.name}
                       % else:
-                        <a href="/pokemon/XXX">${col['species'].name}</a>
+                        <a href="/pokemon/XXX">${cell.species.name}</a>
                       % endif
                     </p>
                     <ul class="-method">
-                        % for evolution in col['species'].evolutions:
+                        % for evolution in cell.species.evolutions:
                         <li>${formatting.evolution_description(evolution)}</li>
                         % endfor
-                        % if col['species'].is_baby and pokemon.species.evolution_chain.baby_trigger_item:
+                        % if cell.species.is_baby and pokemon.species.evolution_chain.baby_trigger_item:
                         <li>
                             ${_(u"Either parent must hold ")} {h.pokedex.item_link(pokemon.species.evolution_chain.baby_trigger_item, include_icon=False, _=_)}
                         </li>

@@ -5,6 +5,15 @@ from pyramid.view import view_config
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
 
+class EvolutionTableCell(object):
+    def __init__(self, species):
+        self.species = species
+        self.rowspan = 1
+
+    @property
+    def is_empty(self):
+        return self.species is None
+
 def _build_evolution_table(evolution_chain_id):
     """Convert an evolution chain into a format more amenable to the HTML table
     model.
@@ -12,7 +21,7 @@ def _build_evolution_table(evolution_chain_id):
     Returns a nested list like:
 
         [
-            [None, Eevee, Vaporeon, None]
+            [empty, Eevee, Vaporeon, None]
             [None, None, Jolton, None]
             [None, None, Flareon, None]
             ...
@@ -20,18 +29,15 @@ def _build_evolution_table(evolution_chain_id):
 
     Each sublist is a physical row in the resulting table, containing one
     element per evolution stage: baby, basic, stage 1, and stage 2.  The
-    individual items are objects...
+    individual items are simple `EvolutionTableCell` objects: None is a cell
+    that should be skipped entirely (due to rowspans) and "empty" is a cell
+    object whose `is_empty` is true.
     """
-
-    # The Pokémon are actually dictionaries with 'pokemon' and 'span' keys,
-    # where the span is used as the HTML cell's rowspan -- e.g., Eevee has a
-    # total of seven descendents, so it would need to span 7 rows.
-
-    evolution_table = []
 
     # Prefetch the evolution details
     q = session.query(t.PokemonSpecies) \
         .filter_by(evolution_chain_id=evolution_chain_id) \
+        .order_by(t.PokemonSpecies.id.asc()) \
         .options(
             subqueryload('evolutions'),
             joinedload('evolutions.trigger'),
@@ -45,83 +51,46 @@ def _build_evolution_table(evolution_chain_id):
         )
     family = q.all()
 
-    # Strategy: build this table going backwards.
-    # Find a leaf, build the path going back up to its root.  Remember all
-    # of the nodes seen along the way.  Find another leaf not seen so far.
-    # Build its path backwards, sticking it to a seen node if one exists.
-    # Repeat until there are no unseen nodes.
-    seen_nodes = {}
-    while True:
-        # First, find some unseen nodes
-        unseen_leaves = []
-        for species in family:
-            if species in seen_nodes:
-                continue
+    # Strategy: Build a row for each final-form Pokémon.  Intermediate species
+    # will naturally get included.
+    # We need to replace repeated cells in the same column with None and fix
+    # rowspans.  Cute trick: build the table backwards, and propagate rowspans
+    # upwards through the table as it's built.
+    evolution_table = []
 
-            children = []
-            # A Pokémon is a leaf if it has no evolutionary children, so...
-            for possible_child in family:
-                if possible_child in seen_nodes:
-                    continue
-                if possible_child.parent_species == species:
-                    children.append(possible_child)
-            if len(children) == 0:
-                unseen_leaves.append(species)
+    all_parent_species = set(species.parent_species for species in family)
+    final_species = [
+        species for species in family
+        if species not in all_parent_species
+    ]
+    final_species.reverse()
 
-        # If there are none, we're done!  Bail.
-        # Note that it is impossible to have any unseen non-leaves if there
-        # are no unseen leaves; every leaf's ancestors become seen when we
-        # build a path to it.
-        if len(unseen_leaves) == 0:
-            break
+    for species in final_species:
+        row = []
+        while species:
+            row.insert(0, EvolutionTableCell(species))
+            species = species.parent_species
 
-        unseen_leaves.sort(key=lambda x: x.id)
-        leaf = unseen_leaves[0]
+        # The last cell in the row is now either a basic or baby.  Insert a
+        # blank cell (with species of None) for baby if necessary
+        if not row[0].species.is_baby:
+            row.insert(0, EvolutionTableCell(None))
 
-        # root, parent_n, ... parent2, parent1, leaf
-        current_path = []
+        # Pad to four columns
+        while len(row) < 4:
+            row.append(EvolutionTableCell(None))
 
-        # Finally, go back up the tree to the root
-        current_species = leaf
-        while current_species:
-            # The loop bails just after current_species is no longer the
-            # root, so this will give us the root after the loop ends;
-            # we need to know if it's a baby to see whether to indent the
-            # entire table below
-            root_pokemon = current_species
+        # Compare to the previous row (which is actually the next row).  If
+        # anything's repeated, absorb its rowspan and replace it with None.
+        if evolution_table:
+            for i, (cell, next_cell) in enumerate(zip(row, evolution_table[-1])):
+                if cell.species == next_cell.species:
+                    cell.rowspan += next_cell.rowspan
+                    evolution_table[-1][i] = None
 
-            if current_species in seen_nodes:
-                current_node = seen_nodes[current_species]
-                # Don't need to repeat this node; the first instance will
-                # have a rowspan
-                current_path.insert(0, None)
-            else:
-                current_node = {
-                    'species': current_species,
-                    'span':    0,
-                }
-                current_path.insert(0, current_node)
-                seen_nodes[current_species] = current_node
+        evolution_table.append(row)
 
-            # This node has one more row to span: our current leaf
-            current_node['span'] += 1
-
-            current_species = current_species.parent_species
-
-        # We want every path to have four nodes: baby, basic, stage 1 and 2.
-        # Every root node is basic, unless it's defined as being a baby.
-        # So first, add an empty baby node at the beginning if this is not
-        # a baby.
-        # We use an empty string to indicate an empty cell, as opposed to a
-        # complete lack of cell due to a tall cell from an earlier row.
-        if not root_pokemon.is_baby:
-            current_path.insert(0, '')
-        # Now pad to four if necessary.
-        while len(current_path) < 4:
-            current_path.append('')
-
-        evolution_table.append(current_path)
-
+    evolution_table.reverse()
     return evolution_table
 
 @view_config(
