@@ -28,11 +28,11 @@ msgstr "タイプ"
 
 #: veekun_pokedex/templates/pokemon.mako:301
 msgid "Held items"
-msgstr "持参"
+msgstr "持ち物"
 
 #: veekun_pokedex/templates/pokemon.mako:333
 msgid "Evolution"
-msgstr "異動"
+msgstr "進化"
 
 #: veekun_pokedex/templates/pokemon.mako:567
 msgid "Moves"
