@@ -1,0 +1,39 @@
+# Translations template for veekun_pokedex.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the veekun_pokedex project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: veekun_pokedex 0.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2012-07-25 22:13-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: veekun_pokedex/templates/pokemon.mako:63
+msgid "Essentials"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:117
+msgid "Type"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:301
+msgid "Held items"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:333
+msgid "Evolution"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:567
+msgid "Moves"
+msgstr ""
+

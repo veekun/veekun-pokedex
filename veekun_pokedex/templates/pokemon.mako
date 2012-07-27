@@ -60,7 +60,7 @@
 
 
 <section>
-    <h1>Essentials</h1>
+    <h1>${_(u'Essentials')}</h1>
 
     <!-- nececssary...? -->
     <!--
@@ -114,7 +114,7 @@
 
     <div class="columns">
         <section class="col6">
-            <h2>type</h2>
+            <h2>${_(u'Type')}</h2>
             XXX
 
             <dl class="horizontal">
@@ -298,7 +298,7 @@
     </div>
 
     <section>
-        <h2>held items</h2>
+        <h2>${_(u'Held items')}</h2>
 
         3: none
         4: none
@@ -330,7 +330,7 @@
 ## evolution
 <section>
     <header>
-        <h1 id="evolution">Evolution</h1>
+        <h1 id="evolution">${_(u'Evolution')}</h1>
         <div class="doorhanger">
             <a href="...">Compare this family</a>
             ## XXX: hey, don't show that link if there's only one pokemon...
@@ -513,6 +513,7 @@
         </section>
 
         <section class="col4">
+        XXX game indices
             <h2>pokédex numbers</h2>
             <dl class="horizontal">
                 <!-- XXX ugh why is this in this list -->
@@ -563,7 +564,7 @@
 
 ## moves
 <section>
-    <h1>Moves</h1>
+    <h1>${_(u'Moves')}</h1>
 
     <table class="table-pretty">
         <tbody>

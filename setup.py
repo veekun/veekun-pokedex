@@ -3,8 +3,8 @@ import os
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.txt')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+README = ''#open(os.path.join(here, 'README.txt')).read()
+CHANGES = ''#open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'pyramid',
@@ -15,6 +15,7 @@ requires = [
     'pyramid_pyscss',
     'zope.sqlalchemy',
     'waitress',
+    'babel',
 ]
 
 setup(name='veekun_pokedex',
@@ -42,5 +43,13 @@ setup(name='veekun_pokedex',
         [console_scripts]
         populate_veekun_pokedex = veekun_pokedex.scripts.populate:main
     """,
+
+    # i18n
+    message_extractors={'.': [
+        ('**.py', 'python', None),
+        ('**.mako', 'mako', dict(
+            input_encoding='utf8',
+        )),
+    ]},
 )
 

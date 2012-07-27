@@ -32,6 +32,35 @@ resource_root = Root()
 resource_root['pokemon'] = PokemonIndex()
 
 
+### Event stuff
+
+from pyramid.i18n import get_locale_name, get_localizer, TranslationStringFactory
+
+tsf = TranslationStringFactory('veekun_pokedex')
+
+def inject_globals(event):
+    request = event['request']
+    event['_'] = lambda *a, **kw: request.localizer.translate(tsf(*a, **kw))
+
+# TODO make this a request subclass instead tbh
+def inject_request(event):
+    event.request._LOCALE_ = 'ja'
+
+    locale_name = get_locale_name(event.request)
+    q = session.query(t.Language).filter_by(identifier=locale_name)
+    try:
+        language_row = q.one()
+        #session.default_language_id = language_row.id
+    except Exception as e:
+        print e
+        raise
+
+    # TODO is this a circular ref
+    event.request.localizer = get_localizer(event.request)
+
+
+### main
+
 def main(global_config, **settings):
     """Builds and returns a wsgi app."""
 
@@ -40,6 +69,12 @@ def main(global_config, **settings):
     session.configure(bind=engine)
 
     config = Configurator(settings=settings, root_factory=lambda request: resource_root)
+
+    # i18n gunk
+    config.add_subscriber(inject_globals, 'pyramid.events.BeforeRender')
+    config.add_subscriber(inject_request, 'pyramid.events.NewRequest')
+    config.add_translation_dirs('veekun_pokedex:locale/')
+
     config.add_route('main', '/')
     config.scan()
 
