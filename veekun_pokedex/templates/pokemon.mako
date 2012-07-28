@@ -117,24 +117,36 @@
     <div class="columns">
         <section class="col6">
             <h2>${_(u'Type')}</h2>
-            XXX
+            XXX more stuff here?  like what?  seems barren.
+            XXX one nice thing: status effects we're immune to
+
+            <%def name="_type_efficacy_pair(efficacy, efficacy_label, description)">
+                <dt>${description} (×${efficacy_label})</dt>
+                <dd>
+                  % if efficacy in efficacy_types:
+                    <ul class="inline">
+                      % for type_ in efficacy_types[efficacy]:
+                        <li>${type_icon(type_.identifier)}</li>
+                      % endfor
+                    </ul>
+                  % else:
+                    none
+                  % endif
+                </dd>
+            </%def>
 
             <dl class="horizontal">
-                <dt>Immune (×0)</dt>
-                <dd>
-                    <ul class="inline">
-                        <li>${type_icon(u'ghost')}</li>
-                    </ul>
-                </dd>
-                <dt>Resistant (×½)</dt>
-                <dd>none
-                </dd>
-                <dt>Vulnerable (×2)</dt>
-                <dd>
-                    <ul class="inline">
-                        <li>${type_icon(u'fighting')}</li>
-                    </ul>
-                </dd>
+                ${_type_efficacy_pair(0, u'0', _(u'Immune'))}
+                % if len(pokemon.types) >= 2:
+                    ${_type_efficacy_pair(25, u'¼', _(u'Very resistant'))}
+                % endif
+                ${_type_efficacy_pair(50, u'½', _(u'Resistant'))}
+                ## Don't show normal damage
+                ##${_type_efficacy_pair(100, u'1', _(u'Normal'))}
+                ${_type_efficacy_pair(200, u'2', _(u'Vulnerable'))}
+                % if len(pokemon.types) >= 2:
+                    ${_type_efficacy_pair(400, u'4', _(u'Very vulnerable'))}
+                % endif
             </dl>
         </section>
         <section class="col6">

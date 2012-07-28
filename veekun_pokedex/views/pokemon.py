@@ -1,4 +1,6 @@
 #encoding: utf8
+from collections import defaultdict
+
 from sqlalchemy.orm import joinedload, subqueryload
 from pyramid.view import view_config
 
@@ -101,6 +103,25 @@ def pokemon(context, request):
 
     template_ns = dict(pokemon=pokemon)
 
+    ## Type efficacy
+    type_efficacies = defaultdict(lambda: 100)
+    for target_type in pokemon.types:
+        # We start at 100, and every damage factor is a percentage.  Dividing
+        # by 100 with every iteration turns the damage factor into a decimal
+        # percentage, without any float nonsense
+        for type_efficacy in target_type.target_efficacies:
+            type_efficacies[type_efficacy.damage_type] = (
+                type_efficacies[type_efficacy.damage_type]
+                * type_efficacy.damage_factor // 100)
+
+    # Turn that dict of type => efficacy into a dict of efficacy => types.
+    efficacy_types = {}
+    for type_, efficacy in type_efficacies.items():
+        efficacy_types.setdefault(efficacy, []).append(type_)
+
+    template_ns['efficacy_types'] = efficacy_types
+
+    ## Evolution
     template_ns['evolution_table'] = _build_evolution_table(
         pokemon.species.evolution_chain_id)
 

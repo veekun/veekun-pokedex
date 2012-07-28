@@ -44,7 +44,7 @@ def inject_globals(event):
 
 # TODO make this a request subclass instead tbh
 def inject_request(event):
-    event.request._LOCALE_ = 'ja'
+    #event.request._LOCALE_ = 'ja'
 
     locale_name = get_locale_name(event.request)
     q = session.query(t.Language).filter_by(identifier=locale_name)
