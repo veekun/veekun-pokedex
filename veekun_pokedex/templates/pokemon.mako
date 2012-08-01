@@ -408,7 +408,7 @@
                     </p>
                     <ul class="-method">
                         % for evolution in cell.species.evolutions:
-                        <li>${formatting.evolution_description(evolution)}</li>
+                        <li>${lib.evolution_description(evolution)}</li>
                         % endfor
                         % if cell.species.is_baby and pokemon.species.evolution_chain.baby_trigger_item:
                         <li>
