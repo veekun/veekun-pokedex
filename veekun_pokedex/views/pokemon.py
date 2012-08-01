@@ -1,11 +1,92 @@
 #encoding: utf8
 from collections import defaultdict
+import operator
 
 from sqlalchemy.orm import joinedload, subqueryload
 from pyramid.view import view_config
 
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
+
+
+class CollapsibleVersionTable(object):
+    """I represent a table where the columns are versions.  Stick data in
+    me, and I'll look for duplicate columns and collapse them.
+
+    I kind of suck!  I wish I sucked less.
+    """
+    _baked = False
+
+    def __init__(self):
+        # version => { key => value }
+        self._column_data = {}
+        self._uncollapsible = set()
+        self._row_order = []
+        self._row_index = set()
+        self._seen_generations = set()
+
+    def set(self, version, row_key, value):
+        # Actually store the value
+        column = self._column_data.setdefault(version, {})
+        column[row_key] = value
+
+        # Possibly un-collapse columns
+        version_group = version.version_group
+        generation = version_group.generation
+
+        if version_group in self._column_data:
+            if row_key in self._column_data[version_group] and \
+                    self._column_data[version_group][row_key] != value:
+                self._uncollapsible.add(version_group)
+                self._uncollapsible.add(generation)
+        else:
+            self._column_data[version.version_group] = column
+
+        if generation in self._column_data:
+            if row_key in self._column_data[generation] and \
+                    self._column_data[generation][row_key] != value:
+                self._uncollapsible.add(generation)
+        else:
+            self._column_data[version.generation] = column
+
+        # Bookkeeping
+        self._seen_generations.add(generation)
+        if row_key not in self._row_index:
+            self._row_order.append(row_key)
+            self._row_index.add(row_key)
+
+    def bake(self):
+        self._baked = True
+
+        self._columns = []
+        for generation in sorted(self._seen_generations, key=operator.attrgetter('id')):
+            if generation in self._uncollapsible or any(version_group not in self._column_data for version_group in generation.version_groups):
+                for version_group in generation.version_groups:
+                    if version_group not in self._column_data:
+                        continue
+
+                    if version_group in self._uncollapsible or any(version not in self._column_data for version in version_group.versions):
+                        self._columns.extend(version for version in version_group.versions if version in self._column_data)
+                    else:
+                        self._columns.append(version_group)
+            else:
+                self._columns.append(generation)
+
+
+    @property
+    def column_headers(self):
+        return self._columns
+
+    @property
+    def rows(self):
+        for row_key in self._row_order:
+            class Foo(list): pass
+            row = Foo()
+            for column in self._columns:
+                row.append(self._column_data.get(column, {}).get(row_key))
+            row.key = row_key
+            yield row
+
 
 class EvolutionTableCell(object):
     def __init__(self, species):
@@ -120,6 +201,17 @@ def pokemon(context, request):
         efficacy_types.setdefault(efficacy, []).append(type_)
 
     template_ns['efficacy_types'] = efficacy_types
+
+    ## Wild held items
+    # To date (as of B/W 2), no Pokémon has ever held more than three different
+    # items in its history.  So it makes sense to show wild items as a little
+    # table like the move table.
+    item_table = CollapsibleVersionTable()
+    for pokemon_item in pokemon.items:
+        item_table.set(pokemon_item.version, pokemon_item.item, pokemon_item.rarity)
+    item_table.bake()
+
+    template_ns['wild_held_items'] = item_table
 
     ## Evolution
     template_ns['evolution_table'] = _build_evolution_table(

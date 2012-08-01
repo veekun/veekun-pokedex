@@ -312,11 +312,32 @@
     </div>
 
     <section>
-        <h2>${_(u'Held items')}</h2>
+        <h2>${_(u'Wild held items')}</h2>
 
-        3: none
-        4: none
-        5: none
+        <table>
+        <tr>
+            <th></th>
+            % for column in wild_held_items.column_headers:
+            ##<th>${lib.version_icon(version)}</th>
+            <th>${lib.any_version_icon(column)}</th>
+            % endfor
+        </tr>
+        % for row in wild_held_items.rows:
+        <tr>
+            <th><a href="${request.route_url('main')}">${lib.item_icon(row.key)} ${row.key.name}</a></th>
+            ## TODO not quite right...
+            % for rarity in row:
+            <td>
+                % if rarity is None:
+                —
+                % else:
+                ${rarity}%
+                % endif
+            </td>
+            % endfor
+        </tr>
+        % endfor
+        </table>
     </section>
 
     <section>
