@@ -150,77 +150,51 @@
             </dl>
         </section>
         <section class="col6">
-        <% hsl_stuff = u'70%, 83%' %>
-            <h2>stats</h2>
+            <h2>Stats</h2>
+            <%def name="stats_cell(percentile)">
+                <div class="statsbar" title="Better than ${int(percentile * 100 + 0.5)}% of Pokémon">
+                    <div class="statsbar-bar" style="width: ${percentile * 100}%; background-color: hsl(${percentile * 360}, 70%, 83%);">
+                        % if percentile < 0.1:
+                        terrible
+                        % elif percentile < 0.3:
+                        bad
+                        % elif percentile > 0.9:
+                        awesome
+                        % elif percentile > 0.7:
+                        good
+                        % else:
+                        okay
+                        % endif
+                    </div>
+                </div>
+            </%def>
             <table class="standard-table pokemon-stats">
                 <thead>
                     <tr></tr>
                 </thead>
                 <tbody>
+                  % for pokemon_stat in pokemon.stats:
                     <tr>
-                        <th>HP</th>
-                        <td>55</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 32%; background-color: hsl(${32*360/100}, ${hsl_stuff});">32nd</div></div>
-                        </td>
-                        <td>283–314</td>
+                        <th>${pokemon_stat.stat.name}</th>
+                        <td>${pokemon_stat.base_stat}</td>
+                        <td>${stats_cell(stat_percentiles[pokemon_stat.stat])}</td>
                     </tr>
-                    <tr>
-                        <th>Attack</th>
-                        <td>55</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 27%; background-color: hsl(${27*360/100}, ${hsl_stuff});">27th</div></div>
-                        </td>
-                        <td>283–314</td>
-                    </tr>
-                    <tr>
-                        <th>Defense</th>
-                        <td>50</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 26%; background-color: hsl(${26*360/100}, ${hsl_stuff});">26th</div></div>
-                        </td>
-                        <td>283–314</td>
-                    </tr>
-                    <tr>
-                        <th>Special Attack</th>
-                        <td>45</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 24%; background-color: hsl(${24*360/100}, ${hsl_stuff});">24th</div></div>
-                        </td>
-                        <td>283–314</td>
-                    </tr>
-                    <tr>
-                        <th>Special Defense</th>
-                        <td>65</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 49%; background-color: hsl(${49*360/100}, ${hsl_stuff});">49th</div></div>
-                        </td>
-                        <td>283–314</td>
-                    </tr>
-                    <tr>
-                        <th>Speed</th>
-                        <td>55</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 37%; background-color: hsl(${37*360/100}, ${hsl_stuff});">37th</div></div>
-                        </td>
-                        <td>283–314</td>
-                    </tr>
-                    <tr>
-                        <th>Total</th>
-                        <td>325</td>
-                        <td>
-                            <div class="statsbar"><div class="statsbar-bar" style="width: 26%; background-color: hsl(${26*360/100}, ${hsl_stuff});">26th</div></div>
-                        </td>
-                        <td></td>
-                    </tr>
+                  % endfor
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>${_(u'Total')}</th>
+                        <td>${stat_total}</td>
+                        <td>${stats_cell(stat_percentiles[u'total'])}</td>
+                    </tr>
+                </tfoot>
             </table>
         </section>
     </div>
 
     <div class="columns">
         <section class="col6">
-            <h2>breeding</h2>
+            <h2>Breeding</h2>
             <dl class="horizontal">
                 <dt>Gender</dt>
                 <dd><div class="gender-bar" data-male="7">⅞ male, ⅛ female</div></dd>
@@ -240,7 +214,7 @@
 
 
         <section class="col6">
-            <h2>training</h2>
+            <h2>Training</h2>
             <dl class="horizontal">
                 <dt>Base EXP</dt>
                 <dd>

@@ -2,12 +2,19 @@
 from collections import defaultdict
 import operator
 
+from sqlalchemy import func
 from sqlalchemy.orm import joinedload, subqueryload
+from sqlalchemy.sql.expression import case
 from pyramid.view import view_config
 
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
 
+def _countif(expr):
+    """SQL expression: count the number rows in an aggregate for which `expr`
+    is true.
+    """
+    return func.sum(case({expr: 1}, else_=0))
 
 class CollapsibleVersionTable(object):
     """I represent a table where the columns are versions.  Stick data in
@@ -201,6 +208,44 @@ def pokemon(context, request):
         efficacy_types.setdefault(efficacy, []).append(type_)
 
     template_ns['efficacy_types'] = efficacy_types
+
+    ### Stats
+    # This takes a lot of queries  :(
+    stat_total = 0
+    stat_percentiles = {}
+    for pokemon_stat in pokemon.stats:
+        stat_total += pokemon_stat.base_stat
+
+        less = _countif(t.PokemonStat.base_stat < pokemon_stat.base_stat)
+        equal = _countif(t.PokemonStat.base_stat == pokemon_stat.base_stat)
+        total = func.count(t.PokemonStat.base_stat)
+        q = session.query((less + equal / 2.) / total) \
+            .filter_by(stat=pokemon_stat.stat)
+
+        percentile, = q.one()
+
+        # pg gives us fixed-point, which sqla turns into Decimal
+        stat_percentiles[pokemon_stat.stat] = float(percentile)
+
+    # Percentile for the total
+    # Need to make a derived table that maps pokemon_id to total_stats
+    stat_total_subq = session.query(
+            t.PokemonStat.pokemon_id,
+            func.sum(t.PokemonStat.base_stat).label('stat_total'),
+        ) \
+        .group_by(t.PokemonStat.pokemon_id) \
+        .subquery()
+
+    less = _countif(stat_total_subq.c.stat_total < stat_total)
+    equal = _countif(stat_total_subq.c.stat_total == stat_total)
+    total = func.count(stat_total_subq.c.stat_total)
+    q = session.query((less + equal / 2.) / total)
+
+    percentile, = q.one()
+    stat_percentiles['total'] = float(percentile)
+
+    template_ns['stat_percentiles'] = stat_percentiles
+    template_ns['stat_total'] = stat_total
 
     ## Wild held items
     # To date (as of B/W 2), no Pokémon has ever held more than three different
