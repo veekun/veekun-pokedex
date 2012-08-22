@@ -53,11 +53,6 @@
 
 
 
-## TODO whoops better put this in a lib
-<%def name="type_icon(name)"><img src="http://veekun.com/dex/media/types/en/${name}.png" alt="${name}"></%def>
-
-
-
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" async></script>
 
 
@@ -85,8 +80,8 @@
                 <dd># ${pokemon.id}</dd>
                 <dt>Type</dt>
                 <dd>
-                    % for type in pokemon.types:
-                    ${type_icon(type.identifier)}
+                    % for type_ in pokemon.types:
+                    ${lib.type_icon(type_)}
                     % endfor
                 </dd>
             </dl>
@@ -104,7 +99,7 @@
                         Slot ${pokemon_ability.slot}
                     </dt>
                     <dd>
-                        <a href="TODO">${pokemon_ability.ability.name}</a> —
+                        <a href="${request.resource_url(pokemon_ability.ability)}">${pokemon_ability.ability.name}</a> —
                         ## TODO markdown
                         ##${pokemon_ability.ability.short_effect}
                     </dd>
@@ -126,7 +121,7 @@
                   % if efficacy in efficacy_types:
                     <ul class="inline">
                       % for type_ in efficacy_types[efficacy]:
-                        <li>${type_icon(type_.identifier)}</li>
+                        <li>${lib.type_icon(type_)}</li>
                       % endfor
                     </ul>
                   % else:
@@ -298,7 +293,7 @@
         </tr>
         % for row in wild_held_items.rows:
         <tr>
-            <th><a href="${request.route_url('main')}">${lib.item_icon(row.key)} ${row.key.name}</a></th>
+            <th><a href="${request.resource_url(row.key)}">${lib.item_icon(row.key)} ${row.key.name}</a></th>
             ## TODO not quite right...
             % for rarity in row:
             <td>
@@ -377,7 +372,7 @@
                       % if cell.species == pokemon.species:
                         ${cell.species.name}
                       % else:
-                        <a href="/pokemon/XXX">${cell.species.name}</a>
+                        <a href="${request.resource_url(cell.species)}">${cell.species.name}</a>
                       % endif
                     </p>
                     <ul class="-method">

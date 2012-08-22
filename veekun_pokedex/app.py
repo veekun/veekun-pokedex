@@ -7,30 +7,7 @@ from sqlalchemy import engine_from_config
 import pokedex.db
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
-
-### Resource stuff
-
-class Root(dict):
-    pass
-
-class PokemonIndex(object):
-    def __getitem__(self, key):
-        # `key` should be a Pokémon identifier
-        q = session.query(t.Pokemon) \
-            .join(t.Pokemon.species) \
-            .filter_by(identifier=key)
-        try:
-            pokemon = q.one()
-            return pokemon
-        except Exception as e:
-            print e
-            raise KeyError
-
-
-
-resource_root = Root()
-resource_root['pokemon'] = PokemonIndex()
-
+from veekun_pokedex.resource import PokedexURLGenerator, resource_root
 
 ### Event stuff
 
@@ -69,6 +46,7 @@ def main(global_config, **settings):
     session.configure(bind=engine)
 
     config = Configurator(settings=settings, root_factory=lambda request: resource_root)
+    config.add_resource_url_adapter(PokedexURLGenerator)
 
     # i18n gunk
     config.add_subscriber(inject_globals, 'pyramid.events.BeforeRender')

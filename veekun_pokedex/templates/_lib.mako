@@ -3,11 +3,13 @@
 ###### STANDARD LINKS
 
 <%def name="item_link(item)">
-    <a href="${request.route_url('main')}">${item_icon(item)} ${item.name}</a>
+    <a href="${request.resource_url(item)}">${item_icon(item)} ${item.name}</a>
 </%def>
 
 
 ###### SPRITES
+
+<%def name="type_icon(type_)"><img src="http://veekun.com/dex/media/types/en/${type_.identifier}.png" alt="${type_.name}"></%def>
 
 <%def name="item_icon(item)">
     <img src="http://veekun.com/dex/media/items/${item.identifier}.png">
@@ -26,7 +28,7 @@
 <span class="version-${version.identifier}">${version_initials(version.name)}</span>\
 </%def>
 <%def name="generation_icon(generation)">
-<span class="version-gen${generation.id}">${_(u'Gen {n}').format(n=generation.id)}</span>
+<span class="version-gen${generation.id}">&nbsp;${generation.id}&nbsp;</span>
 </%def>
 
 <%def name="any_version_icon(obj)"><%
