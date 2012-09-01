@@ -31,18 +31,41 @@
 table.table-pretty {
     > tbody {
         > tr {
-            &.header {
-                background: green;
-            }
+            border-bottom: 1px solid hsl(0, 0%, 93%);
 
             &:nth-child(2n) {
-                background: lightgray;
+                background: hsl(0, 0%, 96%);
+                background: hsla(0, 0%, 50%, 0.06);
+            }
+            &:hover {
+                background: hsl(210, 50%, 92%);
+            }
+
+            &.header {
+                background-color: hsl(36, 30%, 70%);
+                background-image: -moz-linear-gradient(top, hsl(36, 30%, 90%), hsl(36, 30%, 80%));
+                border-top: 1px solid hsl(36, 30%, 75%);
+            }
+            &.subheader {
+                background: hsl(36, 30%, 93%);
+                border: 1px solid hsl(36, 30%, 90%);
+                border-width: 1px 0;
+            }
+            &.header + .subheader {
+                border-top: none;
+            }
+
+            &:last-child {
+                border-bottom: 1px solid hsl(36, 30%, 75%);
             }
         }
-
     }
-
 }
+
+col.-version {
+    width: 2em;
+}
+
 
 ////// VERSIONS
 [class^='version-'],

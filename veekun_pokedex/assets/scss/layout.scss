@@ -239,7 +239,6 @@ h1 {
     padding: 0.33em;
     margin: 0 0 0.67em;
 
-    background: hsl(225, 70%, 90%);
     background: url(http://veekun.com/dex/media/items/great-ball.png) hsl(225, 50%, 60%) right center no-repeat;
     background-size: auto 100%;
     border: 1px solid hsl(225, 50%, 50%);
@@ -279,7 +278,7 @@ a {
     }
     &:hover,
     &:active {
-        color: hsl(0, 90%, 50%);
+        color: hsl(225, 90%, 25%);
     }
 }
 

@@ -286,17 +286,17 @@
         <table>
         <tr>
             <th></th>
-            % for column in wild_held_items.column_headers:
+            % for column, span in wild_held_items.column_headers:
             ##<th>${lib.version_icon(version)}</th>
-            <th>${lib.any_version_icon(column)}</th>
+            <th colspan="${span}">${lib.any_version_icon(column)}</th>
             % endfor
         </tr>
         % for row in wild_held_items.rows:
         <tr>
             <th><a href="${request.resource_url(row.key)}">${lib.item_icon(row.key)} ${row.key.name}</a></th>
             ## TODO not quite right...
-            % for rarity in row:
-            <td>
+            % for rarity, span in row:
+            <td colspan="${span}">
                 % if rarity is None:
                 —
                 % else:
@@ -501,17 +501,18 @@
     <h1>${_(u'Moves')}</h1>
 
     <table class="table-pretty">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+      % for move_method, move_table in _pokemon_moves_by_method:
         <tbody>
-            <tr>
-                <th>RB</th>
-                <th>Y</th>
-                <th>GS</th>
-                <th>C</th>
-                <th>RSE</th>
-                <th>DP</th>
-                <th>P</th>
-                <th>HS</th>
-                <th>BW</th>
+            <tr class="header">
+              % for column, span in move_table.column_headers:
+                <th colspan="${span}">${lib.any_version_icon(column)}</th>
+              % endfor
                 <th>Move</th>
                 <th>Type</th>
                 <th>Class</th>
@@ -521,28 +522,51 @@
                 <th>Pri</th>
                 <th>Effect</th>
             </tr>
-            <tr>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>Tackle</td>
-                <td>Normal</td>
-                <td>Physical</td>
-                <td>35</td>
-                <td>50</td>
-                <td>100%</td>
-                <td></td>
-                <td>Inflicts regular damage with no additional effect.</td>
+            <tr class="subheader">
+                <th colspan="99">~~~ ${move_method.identifier} ~~~</th>
             </tr>
+
+            % for row in move_table.rows:
+            <tr>
+              % for level, span in row:
+                <td colspan="${span}">
+                    % if level == 0:
+                    ✓
+                    % elif level is not None:
+                    ${level}
+                    % endif
+                </td>
+              % endfor
+                <td><a href="${request.resource_url(row.key)}">${row.key.name}</a></td>
+                <td>${lib.type_icon(row.key.type)}</td>
+                <td><img src="http://veekun.com/dex/media/damage-classes/${row.key.damage_class.identifier}.png" alt="${row.key.damage_class.name}"></td>
+                <td>${row.key.pp}</td>
+                <td>
+                    % if row.key.power:
+                    ${row.key.power}
+                    % else:
+                    —
+                    % endif
+                </td>
+                <td>
+                    % if row.key.accuracy:
+                    ${row.key.accuracy}%
+                    % else:
+                    —
+                    % endif
+                </td>
+                <td>
+                    % if row.key.priority > 0:
+                    ⬆${row.key.priority}
+                    % elif row.key.priority < 0:
+                    ⬇${row.key.priority}
+                    % endif
+                </td>
+                <td>TODO</td>
+            </tr>
+            % endfor
         </tbody>
+      % endfor
     </table>
 </section>
 
