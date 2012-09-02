@@ -27,4 +27,43 @@
         }
     }
 
+
+    // Index
+    .home-tiles {
+        position: relative;
+
+        li {
+            display: block;
+            width: auto;
+        }
+        a {
+            padding: 0.33em;
+        }
+
+        li {
+            margin: 0;
+        }
+        a {
+            background: none;
+            border-width: 0 0 1px;
+            border-radius: 0;
+
+            &:hover {
+                background: inherit;
+                border-color: #ececec;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 360px) {
+    // Index
+    .home-tiles {
+        font-size: 1.5em;
+
+        img {
+            width: 24px;
+            height: 24px;
+        }
+    }
 }

@@ -31,8 +31,8 @@ body {
     font-size: 1.33em;
     background: hsl(225, 50%, 40%);
     background: -moz-linear-gradient(top,
-        hsl(225, 50%, 37%),
-        hsl(225, 50%, 30%)
+        hsl(225, 50%, 45%),
+        hsl(225, 50%, 40%)
     );
     box-shadow: 0 1px 3px hsla(black, 0.5);
 
@@ -313,7 +313,7 @@ section > header {
 
 #footer {
     padding: 1em;
-    background: hsl(0, 0%, 90%);
+    background: hsl(0, 0%, 93%);
     color: hsl(0, 0%, 40%);
 }
 

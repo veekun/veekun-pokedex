@@ -53,6 +53,8 @@ class PokedexURLGenerator(object):
             prefix = 'pokemon'
         elif isinstance(resource, t.PokemonSpecies):
             prefix = 'pokemon'
+        elif isinstance(resource, t.Move):
+            prefix = 'moves'
         elif isinstance(resource, t.Type):
             prefix = 'types'
         elif isinstance(resource, t.Item):

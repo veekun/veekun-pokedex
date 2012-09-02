@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='archetype')}">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='layout')}">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='pokedex')}">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='pokemon')}">
+    <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='index')}">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='mobile')}">
     <title><%block name="title">veekun</%block></title>
 </head>
