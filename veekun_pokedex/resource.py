@@ -10,10 +10,8 @@ from veekun_pokedex.model import session
 
 
 class PokedexIndex(object):
-
-    def __init__(self, table, joins=()):
-        self.table = table
-        self.joins = joins
+    table = None
+    joins = ()
 
     def __getitem__(self, key):
         # `key` should be a whatever identifier
@@ -30,15 +28,39 @@ class PokedexIndex(object):
         except NoResultFound:
             raise KeyError
 
+class PokemonIndex(PokedexIndex):
+    table = t.Pokemon
+    joins = (t.Pokemon.species,)
+
+class MoveIndex(PokedexIndex):
+    table = t.Move
+
+class TypeIndex(PokedexIndex):
+    table = t.Type
+
+class AbilityIndex(PokedexIndex):
+    table = t.Ability
+
+class ItemIndex(PokedexIndex):
+    table = t.Item
+
+class PlaceIndex(PokedexIndex):
+    table = t.Location
+
+class NatureIndex(PokedexIndex):
+    table = t.Nature
+
 
 # This is the good stuff, which defines the actual resource tree.  Keys are
 # initial path components.
 resource_root = dict(
-    pokemon = PokedexIndex(t.Pokemon, joins=(t.Pokemon.species,)),
-    moves = PokedexIndex(t.Move),
-    types = PokedexIndex(t.Type),
-    items = PokedexIndex(t.Item),
-    abilities = PokedexIndex(t.Ability),
+    pokemon = PokemonIndex(),
+    moves = MoveIndex(),
+    types = TypeIndex(),
+    abilities = AbilityIndex(),
+    items = ItemIndex(),
+    places = PlaceIndex(),
+    natures = NatureIndex(),
 )
 
 
