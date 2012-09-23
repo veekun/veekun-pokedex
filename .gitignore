@@ -1,6 +1,7 @@
 .*.swp
 *.pyc
-/*.egg_info
+/*.egg-info
+/.ropeproject
 
 # Ignore compiled gettext files; these are binary junk and semantically
 # identical to *.po
