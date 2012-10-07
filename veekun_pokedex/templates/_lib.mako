@@ -2,6 +2,10 @@
 
 ###### STANDARD LINKS
 
+<%def name="ability_link(ability)">
+    <a href="${request.resource_url(ability)}">${ability.name}</a>
+</%def>
+
 <%def name="item_link(item)">
     <a href="${request.resource_url(item)}">${item_icon(item)} ${item.name}</a>
 </%def>
