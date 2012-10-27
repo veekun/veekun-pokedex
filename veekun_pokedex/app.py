@@ -7,7 +7,7 @@ from sqlalchemy import engine_from_config
 import pokedex.db
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
-from veekun_pokedex.resource import PokedexURLGenerator, resource_root
+from veekun_pokedex.resource import LanguageIndex, PokedexURLGenerator
 
 ### Event stuff
 
@@ -45,7 +45,7 @@ def main(global_config, **settings):
     engine = engine_from_config(settings, 'sqlalchemy.')
     session.configure(bind=engine)
 
-    config = Configurator(settings=settings, root_factory=lambda request: resource_root)
+    config = Configurator(settings=settings, root_factory=LanguageIndex)
     config.add_resource_url_adapter(PokedexURLGenerator)
 
     # i18n gunk

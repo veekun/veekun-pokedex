@@ -288,16 +288,21 @@ def _build_evolution_table(evolution_chain_id):
     return evolution_table
 
 @view_config(
-    context=t.Pokemon,
+    context=t.PokemonSpecies,
     renderer='/pokemon.mako')
 def pokemon(context, request):
-    pokemon = context
+    species = context
+    default_pokemon = species.default_pokemon
 
-    template_ns = dict(pokemon=pokemon)
+    # TODO this pokemon is actually a species!!  deal with forms!!!
+    template_ns = dict(
+        species=species,
+        pokemon=default_pokemon,
+    )
 
     ## Type efficacy
     type_efficacies = defaultdict(lambda: 100)
-    for target_type in pokemon.types:
+    for target_type in default_pokemon.types:
         # We start at 100, and every damage factor is a percentage.  Dividing
         # by 100 with every iteration turns the damage factor into a decimal
         # percentage, without any float nonsense
@@ -317,7 +322,7 @@ def pokemon(context, request):
     # This takes a lot of queries  :(
     stat_total = 0
     stat_percentiles = {}
-    for pokemon_stat in pokemon.stats:
+    for pokemon_stat in default_pokemon.stats:
         stat_total += pokemon_stat.base_stat
 
         less = _countif(t.PokemonStat.base_stat < pokemon_stat.base_stat)
@@ -356,7 +361,7 @@ def pokemon(context, request):
     # items in its history.  So it makes sense to show wild items as a little
     # table like the move table.
     item_table = CollapsibleVersionTable()
-    for pokemon_item in pokemon.items:
+    for pokemon_item in default_pokemon.items:
         item_table.add_version_datum(pokemon_item.version, pokemon_item.item, pokemon_item.rarity)
     item_table.bake()
 
@@ -364,12 +369,12 @@ def pokemon(context, request):
 
     ## Evolution
     template_ns['evolution_table'] = _build_evolution_table(
-        pokemon.species.evolution_chain_id)
+        species.evolution_chain_id)
 
     ## Moves
     # XXX yeah this is bad
     q = session.query(t.PokemonMove) \
-        .with_parent(pokemon) \
+        .with_parent(default_pokemon) \
         .order_by(
             t.PokemonMove.level.asc(),
             # t.Machine.machine_number.asc(),

@@ -2,14 +2,16 @@
 <%namespace name="lib" file="/_lib.mako"/>
 <% from veekun_pokedex.lib import formatting %>
 
-<%block name="title">${pokemon.name} [Pokemon #${pokemon.id}] - veekun</%block>
+## TODO: everywhere there's a species.name needs fixing for forms
+
+<%block name="title">${species.name} [Pokemon #${species.id}] - veekun</%block>
 
 ## XXX surely the name should be a header of some kind?  should this be a header too, instead of nav?
 <%block name="subnav">
 <nav id="subnav">
     <div class="portrait">
-        <div class="eyeball-crop">${lib.pokemon_sprite(pokemon.species)}</div>
-        <div class="name">${pokemon.name}</div>
+        <div class="eyeball-crop">${lib.pokemon_sprite(species)}</div>
+        <div class="name">${species.name}</div>
     </div>
     <ul class="subsections">
         <li><span class="-selected">main</span></li>
@@ -20,14 +22,14 @@
         <li class="prev">
         <a href="ditto">
             <div class="wedge"></div>
-            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.id - 1}.png"></div>
+            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${species.id - 1}.png"></div>
             <div class="name">XXX</div>
         </a>
         </li>
         <li class="next">
         <a href="vaporeon">
             <div class="name">XXX</div>
-            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.id + 1}.png"></div>
+            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${species.id + 1}.png"></div>
             <div class="wedge"></div>
         </a>
         </li>
@@ -38,8 +40,8 @@
         <li><a href="/">veekun</a></li>
         <li><a href="/">Pokémon</a></li>
         <li>
-            <span class="icon-eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/icons/${pokemon.id}.png"></span>
-            ${pokemon.name}
+            <span class="icon-eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/icons/${species.id}.png"></span>
+            ${species.name}
         </li>
         <li>
             ludicrously detailed
@@ -73,11 +75,12 @@
             <dl class="horizontal">
                 XXX forms
                 <dt>Name</dt>
-                <dd>${pokemon.name}</dd>
+                <dd>${species.name}</dd>
                 <dt>Introduced in</dt>
+                XXX
                 <dd><span class="version-gen1">Gen I</span></dd>
                 <dt>National Dex</dt>
-                <dd># ${pokemon.id}</dd>
+                <dd># ${species.id}</dd>
                 <dt>Type</dt>
                 <dd>
                     % for type_ in pokemon.types:
@@ -230,19 +233,19 @@
 
                 <dt>Capture rate</dt>
                 <dd>
-                    ${pokemon.species.capture_rate}
-                    <div class="microbar"><div class="microbar-bar" style="width: ${pokemon.species.capture_rate * 100. / 255}%;"></div></div>
+                    ${species.capture_rate}
+                    <div class="microbar"><div class="microbar-bar" style="width: ${species.capture_rate * 100. / 255}%;"></div></div>
                 </dd>
 
                 <dt>Base happiness</dt>
                 <dd>
-                    ${pokemon.species.base_happiness}
-                    <div class="microbar"><div class="microbar-bar" style="width: ${pokemon.species.base_happiness * 100. / 255}%;"></div></div>
+                    ${species.base_happiness}
+                    <div class="microbar"><div class="microbar-bar" style="width: ${species.base_happiness * 100. / 255}%;"></div></div>
                 </dd>
 
                 <dt>Growth rate</dt>
                 <dd>
-                    ${pokemon.species.growth_rate.name} <br>
+                    ${species.growth_rate.name} <br>
 
                     ## Courtesy of magical!  Graphs level² vs exp.
                     <style type="text/css">
@@ -267,7 +270,7 @@
                         <g>
                             % for rate_ident, rate_path in growth_rate_paths:
                             <path 
-                                % if rate_ident == pokemon.species.growth_rate.identifier:
+                                % if rate_ident == species.growth_rate.identifier:
                                 class="current"
                                 % endif
                                 d="${rate_path}" />
