@@ -70,15 +70,14 @@
 
     <div class="columns">
         <section class="col4">
-            <h2>Important stuff</h2>
+            <h2>${_(u'Overview')}</h2>
 
             <dl class="horizontal">
                 XXX forms
                 <dt>Name</dt>
                 <dd>${species.name}</dd>
                 <dt>Introduced in</dt>
-                XXX
-                <dd><span class="version-gen1">Gen I</span></dd>
+                <dd>${lib.generation_icon(species.generation)}</dd>
                 <dt>National Dex</dt>
                 <dd># ${species.id}</dd>
                 <dt>Type</dt>
@@ -90,25 +89,32 @@
             </dl>
         </section>
 
-        <div class="col8">
+        <div class="col6">
             <section>
                 <h2>Abilities</h2>
                 <dl class="horizontal">
                     % for pokemon_ability in pokemon.pokemon_abilities:
                     <dt>
                         % if pokemon_ability.is_dream:
-                        [Hidden]
+                        Hidden ability
+                        % else:
+                        Ability ${pokemon_ability.slot}
                         % endif
-                        Slot ${pokemon_ability.slot}
                     </dt>
                     <dd>
                         <a href="${request.resource_url(pokemon_ability.ability)}">${pokemon_ability.ability.name}</a> —
                         ## TODO markdown
                         ##${pokemon_ability.ability.short_effect}
+                        ## TODO doesn't exist in ja
+                        ${pokemon_ability.ability.prose_local.short_effect}
                     </dd>
                     % endfor
                 </dl>
             </section>
+        </div>
+
+        <div class="col2">
+            <img src="http://veekun.com/dex/media/pokemon/sugimori/${species.id}.png" style="max-width: 100%; max-height: 16em;">
         </div>
     </div>
 
@@ -195,7 +201,13 @@
             <h2>Breeding</h2>
             <dl class="horizontal">
                 <dt>Gender</dt>
-                <dd><div class="gender-bar" data-male="7">⅞ male, ⅛ female</div></dd>
+                <dd>
+                    <div class="gender-container">
+                        <span class="-male">⅞ male</span>
+                        <span class="-female">⅛ female</span>
+                        <div class="gender-bar" data-male="7"></div>
+                    </div>
+                </dd>
                 <dt>Egg groups</dt>
                 <dd>
                     ground
@@ -214,14 +226,6 @@
         <section class="col6">
             <h2>Training</h2>
             <dl class="horizontal">
-                <dt>Base EXP</dt>
-                <dd>
-                    ${pokemon.base_experience}
-                    <div class="microbar"><div class="microbar-bar" style="width: ${pokemon.base_experience * 100. / 255}%;"></div></div>
-                [1314 exp at level 100]
-                XXX calculator
-                </dd>
-
                 <dt>Effort</dt>
                 <dd>
                     % for pokemon_stat in pokemon.stats:
@@ -229,6 +233,14 @@
                     +${pokemon_stat.effort} ${pokemon_stat.stat.name} <br>
                     % endif
                     % endfor
+                </dd>
+
+                <dt>Base EXP</dt>
+                <dd>
+                    ${pokemon.base_experience}
+                    <div class="microbar"><div class="microbar-bar" style="width: ${pokemon.base_experience * 100. / 255}%;"></div></div>
+                [1314 exp at level 100]
+                XXX calculator
                 </dd>
 
                 <dt>Capture rate</dt>
@@ -286,11 +298,14 @@
     <section>
         <h2>${_(u'Wild held items')}</h2>
 
-        <table>
-        <tr>
+        <table class="table-pretty" style="width: auto;">
+        <col>
+        % for column, span in wild_held_items.column_headers:
+        <col span="${span}" class="-version">
+        % endfor
+        <tr class="header">
             <th></th>
             % for column, span in wild_held_items.column_headers:
-            ##<th>${lib.version_icon(version)}</th>
             <th colspan="${span}">${lib.any_version_icon(column)}</th>
             % endfor
         </tr>
@@ -311,27 +326,7 @@
         % endfor
         </table>
     </section>
-
-    <section>
-        <h2>i am fucking around with css-only version icons</h2>
-        <p><span class="version-red">R</span><span class="version-blue">B</span> // <span class="version-yellow">Y</span></p>
-        <p><span class="version-gold">G</span><span class="version-silver">S</span> // <span class="version-crystal">C</span></p>
-        <p><span class="version-ruby">R</span><span class="version-sapphire">S</span> // <span class="version-emerald">E</span> + <span class="version-fire-red">FR</span><span class="version-leaf-green">LG</span></p>
-        <p><span class="version-diamond">D</span><span class="version-pearl">P</span> // <span class="version-platinum">P</span> + <span class="version-heart-gold">HG</span><span class="version-soul-silver">SS</span></p>
-        <p><span class="version-black">B</span><span class="version-white">W</span> // <span class="version-black2">B2</span><span class="version-white2">W2</span></p>
-        <p><span class="version-colosseum">C</span> // <span class="version-xd">XD</span></p>
-        <hr>
-        <p>
-            <span class="version-gen1">Gen I</span>
-            <span class="version-gen2">Gen II</span>
-            <span class="version-gen3">Gen III</span>
-            <span class="version-gen4">Gen IV</span>
-            <span class="version-gen5">Gen V</span>
-        </p>
-    </section>
 </section>
-
-
 
 
 ## evolution
@@ -443,9 +438,12 @@
                 <dt>Habitat</dt>
                 <dd>${pokemon.species.habitat.name}</dd>
                 <dt>Footprint</dt>
-                <dd><img src="http://veekun.com/dex/media/pokemon/footprints/${pokemon.id}.png"></dd>
+                <dd><img src="http://veekun.com/dex/media/pokemon/footprints/${pokemon.id}.png" class="footprint"></dd>
                 <dt>Shape</dt>
-                <dd><img src="http://veekun.com/dex/media/shapes/${pokemon.species.shape.identifier}.png"> ${pokemon.species.shape.awesome_name}</dd>
+                <dd>
+                    ${pokemon.species.shape.awesome_name} <br>
+                    <img src="http://veekun.com/dex/media/shapes/${pokemon.species.shape.identifier}.png">
+                </dd>
             </dl>
         </section>
 
@@ -504,6 +502,13 @@
     <h1>${_(u'Moves')}</h1>
 
     <table class="table-pretty">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
+        <col class="-version">
         <col class="-version">
         <col class="-version">
         <col class="-version">

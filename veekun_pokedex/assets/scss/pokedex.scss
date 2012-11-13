@@ -26,6 +26,28 @@
     }
 }
 
+.eyeball-crop {
+    display: inline-block;
+    overflow: hidden;
+    height: 48px;
+    width: 96px;
+    vertical-align: bottom;
+
+    img {
+        margin: -24px 0 -24px;
+    }
+}
+
+.item-icon {
+    vertical-align: middle;
+}
+
+.footprint {
+    // Real size is 16×16, which is damn tiny
+    @include pixel-scaling();
+    height: 32px;
+    width: 32px;
+}
 
 ////// TABLES
 table.table-pretty {
@@ -70,93 +92,83 @@ col.-version {
 [class^='version-'],
 [class*=' version-'] {
     display: inline-block;
-    //font-size: 133%;
-    /*
-    height: 1.25em;
-    min-width: 1.25em;
-    line-height: 1.25em;
-    */
-    padding: 0.17em 0.25em;
     line-height: 1;
-    text-align: center;
     font-family: monospace;
-
     font-weight: bold;
-    color: white;
-    background: #999;  // override me!
-    text-shadow: 0 0 1px black;
+
+    text-shadow:
+        -1px -1px 1px white,
+         1px -1px 1px white,
+        -1px  1px 1px white,
+         1px  1px 1px white;
+
+    // override me!  used for generations
+    color: #404040;
 }
 // Gen 1
 .version-red {
-    background: hsl(0, 100%, 40%);
+    color: hsl(0, 100%, 40%);
 }
 .version-blue {
-    background: hsl(240, 100%, 40%);
+    color: hsl(240, 100%, 40%);
 }
 .version-yellow {
-    background: hsl(60, 100%, 40%);
+    color: hsl(60, 100%, 40%);
 }
 // Gen 2
 .version-gold {
-    background: hsl(60, 100%, 40%);
+    color: hsl(60, 100%, 40%);
 }
 .version-silver {
-    background: hsl(0, 0%, 40%);
+    color: hsl(0, 0%, 40%);
 }
 .version-crystal {
-    background: hsl(240, 100%, 70%);
+    color: hsl(240, 100%, 70%);
 }
 // Gen 3
 .version-ruby {
-    background: hsl(0, 90%, 60%);
+    color: hsl(0, 90%, 60%);
 }
 .version-sapphire {
-    background: hsl(240, 90%, 60%);
+    color: hsl(240, 90%, 60%);
 }
 .version-emerald {
-    background: hsl(120, 90%, 40%);
+    color: hsl(120, 90%, 40%);
 }
 .version-firered {
-    background: hsl(0, 100%, 40%);
+    color: hsl(0, 100%, 40%);
 }
 .version-leafgreen {
-    background: hsl(120, 100%, 30%);
+    color: hsl(120, 100%, 30%);
 }
 // Gen 4
 .version-diamond {
-    background: hsl(240, 90%, 80%);
-    text-shadow: 0 0 2px hsl(240, 90%, 40%);
+    color: hsl(240, 90%, 80%);
 }
 .version-pearl {
-    background: hsl(0, 90%, 80%);
+    color: hsl(0, 90%, 80%);
 }
 .version-platinum {
-    background: hsl(0, 0%, 80%);
+    color: hsl(0, 0%, 70%);
 }
 .version-heartgold {
-    background: hsl(60, 100%, 40%);
+    color: hsl(60, 100%, 30%);
 }
 .version-soulsilver {
-    background: hsl(0, 0%, 40%);
+    color: hsl(0, 0%, 40%);
 }
 // Gen 5
 .version-black {
-    background: #404040;
-    text-shadow: 0 0 4px black;
+    color: #404040;
 }
 .version-white {
-    color: black;
-    background: #c0c0c0;
-    text-shadow: 0 0 4px white;
+    color: #c0c0c0;
 }
 .version-black-2 {
-    background: #404040;
-    text-shadow: 0 0 4px black;
+    color: #404040;
 }
 .version-white-2 {
-    color: black;
-    background: #c0c0c0;
-    text-shadow: 0 0 4px white;
+    color: #c0c0c0;
 }
 // Other
 .version-colosseum {
@@ -175,18 +187,35 @@ img[src*="/types/"] {
 
 
 ////// GENDER
+.gender-container {
+    position: relative;
+    width: 12em;
+
+    > .-male {
+        display: block;
+        float: left;
+    }
+    > .-female {
+        display: block;
+        float: right;
+    }
+
+    > .gender-bar {
+        clear: both;
+    }
+}
+
 @mixin gender-background($boy-pct) {
-    $boy: hsl(240, 40%, 60%);
-    $girl: hsl(300, 40%, 60%);
+    $boy: hsl(225, 60%, 75%);
+    $girl: hsl(0, 60%, 75%);
+
     background-image: -moz-linear-gradient(left, $boy, $boy $boy-pct, $girl $boy-pct, $girl);
 }
 .gender-bar {
-    //font-size: 90%;
-    width: 12em;
+    height: 0.33em;
     text-align: center;
-    color: white;
+    border-radius: 1px;
     background: #ddd;
-    border: 1px solid #ccc;
 
     &[data-male="7"] {
         @include gender-background(100% * 7/8);

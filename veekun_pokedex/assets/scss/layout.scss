@@ -51,19 +51,8 @@ body {
 #subnav {
     position: relative;
     height: 48px;  // TODO make this all more flexibly heighted
+    padding-left: 24px;  // width of eevee strip
     background: hsl(36, 20%, 90%);
-
-    .eyeball-crop {
-        display: inline-block;
-        overflow: hidden;
-        height: 48px;
-        width: 96px;
-        vertical-align: bottom;
-
-        img {
-            margin: -24px 0 -24px;
-        }
-    }
 
     .portrait {
         .eyeball-crop {
@@ -265,7 +254,11 @@ h2 {
 
     color: hsl(225, 50%, 60%);
     text-shadow: 1px 1px 1px hsl(225, 50%, 90%);
-    box-shadow: inset 0 -2px 0 hsl(225, 50%, 90%);
+    // This makes for a light bottom border that fades downwards, keeping it
+    // still visible but not obnoxious.  Cool.
+    border-bottom: 1px solid hsl(225, 50%, 90%);
+    box-shadow:
+        0 3px 2px -2px hsl(225, 50%, 95%);
 }
 
 // XXX split most of this into a mixin
@@ -297,9 +290,9 @@ section > header {
     }
 
     h1 + .doorhanger {
-        margin: 0 3em 0 1em;
+        margin: 0 2em 0 1em;
         padding: 0.5em;
-        border: 1px solid hsl(225, 50%, 70%);
+        border: 1px solid hsl(225, 50%, 80%);
         border-top: none;
         border-radius: 0 0 0.5em 0.5em;
 
@@ -312,11 +305,12 @@ section > header {
 }
 
 #footer {
+    margin-top: 2em;
     padding: 1em;
-    background: hsl(0, 0%, 93%);
-    color: hsl(0, 0%, 40%);
+    background: hsl(30, 13%, 90%);
+    color: hsl(30, 13%, 40%);
 }
 
 dt {
-    color: hsl(36, 20%, 48%) !important;
+    color: hsl(36, 20%, 57%) !important;
 }
