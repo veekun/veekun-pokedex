@@ -1,6 +1,7 @@
 <%! from veekun_pokedex.lib.formatting import version_initials %>
 
-###### STANDARD LINKS
+################################################################################
+## Standard links
 
 <%def name="ability_link(ability)">
     <a href="${request.resource_url(ability)}">${ability.name}</a>
@@ -11,12 +12,13 @@
 </%def>
 
 
-###### SPRITES
+################################################################################
+## Sprites for Pokémon, items, etc.
 
 <%def name="type_icon(type_)"><img src="http://veekun.com/dex/media/types/en/${type_.identifier}.png" alt="${type_.name}"></%def>
 
 <%def name="item_icon(item)">
-    <img src="http://veekun.com/dex/media/items/${item.identifier}.png">
+    <img src="http://veekun.com/dex/media/items/${item.identifier}.png" class="item-icon">
 </%def>
 
 <%def name="pokemon_sprite(species)">
@@ -24,15 +26,20 @@
 </%def>
 
 
-###### MISC UI
+################################################################################
+## Versions, version groups, and generations
 
 <%def name="version_icon(version)">\
 ## Ruby → R, HeartGold → HG, Black 2 → B2
 ## TODO: how does this play with other languages
 <span class="version-${version.identifier}">${version_initials(version.name)}</span>\
 </%def>
-<%def name="generation_icon(generation)">
-<span class="version-gen${generation.id}">&nbsp;${generation.id}&nbsp;</span>
+
+<%def name="generation_icon(generation)">${generation_icon_by_id(generation.id)}</%def>
+
+## Use me to get a generation icon without a real Generation object
+<%def name="generation_icon_by_id(generation_id)">
+<span class="version-gen${generation_id}">&nbsp;${generation_id}&nbsp;</span>
 </%def>
 
 <%def name="any_version_icon(obj)"><%
@@ -49,6 +56,36 @@
         raise TypeError("{0} don't look like no kinda version to me".format(obj))
 
 %></%def>
+
+
+################################################################################
+## Large chunks of pages
+
+<%def name="names_list(name_mapping)">
+    <dl class="horizontal">
+      ## XXX keysort
+      % for language, foreign_name in name_mapping.iteritems():
+      ## XXX no notion of "game language" yet
+      ##% if language != c.game_language and foreign_name:
+      % if foreign_name:
+        <dt>
+            ${language.name}
+            <img src="{h.static_uri('spline', "flags/{0}.png".format(language.iso3166))}" alt="">
+        </dt>
+        <dd>
+            ${foreign_name}
+          % if language.identifier == 'ja':
+            ({h.pokedex.romanize(foreign_name)})</dd>
+          % endif
+        </dd>
+      % endif
+      % endfor
+    </dl>
+</%def>
+
+
+################################################################################
+## Misc UI-y stuff
 
 <%def name="evolution_description(evolution)"><%
 
