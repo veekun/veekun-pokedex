@@ -51,7 +51,7 @@
             <section>
                 <h2>${_(u'Effect summary')}</h2>
                 ## TODO markdown
-                ${move.move_effect.prose_local.short_effect}
+                ${lib.render_markdown(move.move_effect, 'short_effect')}
             </section>
         </div>
     </div>
@@ -132,7 +132,7 @@
             ## XXX can this be None?
             ## TODO pp-up
             <dd>${move.pp}</dd>
-            <dt>${_(u'Target')}</dt>
+            <dt>${_(u"Range")}</dt>
             <dd>
                 ## TODO illustrations
                 ## TODO japans.
@@ -162,7 +162,7 @@
     <div class="columns">
         <section class="col8">
             ## TODO doesn't exist in ja
-            ${move.move_effect.prose_local.effect}
+            ${lib.render_markdown(move, 'effect')}
         </section>
 
         <section class="col4">
@@ -179,7 +179,8 @@
             <ul>
                 <li>
                     <a href="{url(controller='dex_search', action='move_search', category=meta.category.identifier)}">
-                        ${meta.category.description}</a>
+                        ## XXX okay, well, this isn't really markdown, but...
+                        ${lib.render_markdown(meta.category, 'description')}</a>
                 </li>
                 % if meta.meta_ailment_id:
                 <li>
@@ -263,9 +264,9 @@
 </section>
 
 <section>
-    <h1>${_(u'Flavor')}</h1>
+    <h1>${_(u"Flavor")}</h1>
 
-    <h2>${_(u'Flavor text')}</h2>
+    <h2>${_(u"Flavor text")}</h2>
     ## TODO other languages?
     ## XXX whoops this shows every language we've got lol
     <dl class="horizontal">
@@ -318,7 +319,8 @@
             <dt>${_(u"Jam")}</dt>
             <dd>${contest_hearts(u'♥', move.contest_effect.jam)}</dd>
             <dt>${_(u"Flavor text")}</dt>
-            <dd>${move.contest_effect.flavor_text}</dd>
+            ## XXX again, not markdown, but...
+            <dd>${lib.render_markdown(move.contest_effect, 'flavor_text')}</dd>
 
             <dt>${_(u"Use after")}</dt>
             <dd>${contest_moves(move.contest_combo_prev)}</dd>
@@ -340,7 +342,8 @@
             <dt>${_("Appeal")}</dt>
             <dd>${contest_hearts(u'♡', move.super_contest_effect.appeal)}</dd>
             <dt>${_("Flavor text")}</dt>
-            <dd>${move.super_contest_effect.flavor_text}</dd>
+            ## XXX again, not markdown, but...
+            <dd>${lib.render_markdown(move.super_contest_effect, 'flavor_text')}</dd>
 
             <dt>${_("Use after")}</dt>
             <dd>${contest_moves(move.super_contest_combo_prev)}</dd>

@@ -1,39 +1,31 @@
 # encoding: utf8
-from wsgiref.simple_server import make_server
-
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
 
-import pokedex.db
-import pokedex.db.tables as t
 from veekun_pokedex.model import session
 from veekun_pokedex.resource import LanguageIndex, PokedexURLGenerator
 
 ### Event stuff
 
-from pyramid.i18n import get_locale_name, get_localizer, TranslationStringFactory
+from pyramid.i18n import get_localizer, TranslationStringFactory
 
 tsf = TranslationStringFactory('veekun_pokedex')
 
 def inject_globals(event):
     request = event['request']
-    event['_'] = lambda *a, **kw: request.localizer.translate(tsf(*a, **kw))
+    event['_'] = lambda *a, **kw: get_localizer(request).translate(tsf(*a, **kw))
 
-# TODO make this a request subclass instead tbh
 def inject_request(event):
-    #event.request._LOCALE_ = 'ja'
+    request = event.request
 
-    locale_name = get_locale_name(event.request)
-    q = session.query(t.Language).filter_by(identifier=locale_name)
-    try:
-        language_row = q.one()
-        #session.default_language_id = language_row.id
-    except Exception as e:
-        print e
-        raise
+    from pokedex.db.markdown import PokedexLinkExtension
+    class VeekunExtension(PokedexLinkExtension):
+        def object_url(self, category, obj):
+            # XXX this probably does not need to be a closure-class
+            return request.resource_url(obj)
 
-    # TODO is this a circular ref
-    event.request.localizer = get_localizer(event.request)
+    # XXX this spews warnings; may or may not be a problem
+    session.configure(markdown_extension_class=VeekunExtension)
 
 
 ### main

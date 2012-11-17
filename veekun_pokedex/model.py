@@ -13,4 +13,3 @@ session = MultilangScopedSession(
 )
 
 # No tables here.  Only tables are from pokedex.db.tables.
-# TODO import all that...?

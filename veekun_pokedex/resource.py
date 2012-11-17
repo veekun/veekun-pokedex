@@ -43,10 +43,13 @@ class LanguageIndex(object):
             raise KeyError
 
         # TODO could cache these in-process...
-        locale_id = session.query(t.Language.id).filter_by(identifier=key).one()
-        session.default_language_id = locale_id
+        language = session.query(t.Language).filter_by(identifier=key).one()
+        session.default_language_id = language.id
 
+        # TODO this leaves a request out to dry if it doesn't happen to come
+        # through here
         self.request._LOCALE_ = key
+        self.request._veekun_language = language
         return localized_resource_root[key]
 
 class PokedexIndex(object):
@@ -132,5 +135,6 @@ class PokedexURLGenerator(object):
         else:
             raise TypeError(repr(resource))
 
-        self.virtual_path = '/' + prefix + '/' + resource.identifier
+        self.virtual_path = u"/{0}/{1}/{2}".format(
+            request._LOCALE_, prefix, resource.name.lower())
         self.physical_path = self.virtual_path

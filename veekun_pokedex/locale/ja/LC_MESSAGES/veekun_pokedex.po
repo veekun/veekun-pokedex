@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: veekun_pokedex 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2012-07-25 22:13-0700\n"
+"POT-Creation-Date: 2012-11-17 03:41-0800\n"
 "PO-Revision-Date: 2012-07-25 22:00-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: ja <LL@li.org>\n"
@@ -18,23 +18,474 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: veekun_pokedex/templates/pokemon.mako:63
+#: veekun_pokedex/templates/_lib.mako:154
+msgid ""
+"Sorry, we haven't translated this into your language yet!  Here's the "
+"original English.  (If you can help translate, let us know!)"
+msgstr "ごめん、まだ訳さない。　だから、下に英語の原文ある。　（訳すのを助ければいい！　見ての通り上手じゃない。）"
+
+#: veekun_pokedex/templates/_lib.mako:186
+msgid "Level up"
+msgstr "レベルアップ"
+
+#: veekun_pokedex/templates/_lib.mako:188
+msgid "Trade"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:192
+msgid "Use {article} {item}"
+msgstr "{item}を使う"
+
+#: veekun_pokedex/templates/_lib.mako:197
+msgid ""
+"Evolve {from_pokemon} ({to_pokemon} will consume a Poké Ball and appear "
+"in a free party slot)"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:202
+msgid "Do something"
+msgstr "何かやる。。。"
+
+#: veekun_pokedex/templates/_lib.mako:210
+msgid "{0}s only"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:212
+msgid "during the {0}"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:214
+msgid "starting at level {0}"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:218
+msgid "around {0}"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:221
+msgid "while holding {article} {item}"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:226
+msgid "knowing {0}"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:229
+msgid "with at least {0} happiness"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:232
+msgid "with at least {0} beauty"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:236
+msgid "<"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:238
+msgid ">"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:240
+msgid "="
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:241
+msgid "when Attack {0} Defense"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:243
+msgid "with {0} in the party"
+msgstr ""
+
+#: veekun_pokedex/templates/_lib.mako:246
+msgid "in exchange for {0}"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:33
+#: veekun_pokedex/templates/pokemon.mako:42
 msgid "Essentials"
 msgstr "不可欠"
 
-#: veekun_pokedex/templates/pokemon.mako:117
+#: veekun_pokedex/templates/move.mako:38
+#: veekun_pokedex/templates/pokemon.mako:46
+msgid "Overview"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:52
+msgid "Effect summary"
+msgstr "効果概略"
+
+#: veekun_pokedex/templates/move.mako:60 veekun_pokedex/templates/move.mako:315
+#: veekun_pokedex/templates/move.mako:340
+#: veekun_pokedex/templates/pokemon.mako:56
+#: veekun_pokedex/templates/pokemon.mako:93
+#: veekun_pokedex/templates/pokemon.mako:509
 msgid "Type"
 msgstr "タイプ"
 
-#: veekun_pokedex/templates/pokemon.mako:301
-msgid "Held items"
+#: veekun_pokedex/templates/move.mako:71
+msgid "none"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:77
+msgid "Ineffective"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:81
+msgid "Not very effective"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:84
+msgid "Super effective"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:92
+msgid "Machines"
+msgstr "マシン"
+
+#: veekun_pokedex/templates/move.mako:103
+msgid "Numbers"
+msgstr "番号"
+
+#: veekun_pokedex/templates/move.mako:106
+#: veekun_pokedex/templates/pokemon.mako:512
+msgid "Power"
+msgstr "威力"
+
+#: veekun_pokedex/templates/move.mako:109
+msgid "no damage"
+msgstr "ダメージない"
+
+#: veekun_pokedex/templates/move.mako:111
+msgid "variable"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:119
+msgid "Accuracy"
+msgstr "命中率"
+
+#: veekun_pokedex/templates/move.mako:122
+msgid "cannot miss"
+msgstr "必ず命中する"
+
+#: veekun_pokedex/templates/move.mako:131
+#: veekun_pokedex/templates/pokemon.mako:511
+msgid "PP"
+msgstr "PP"
+
+#: veekun_pokedex/templates/move.mako:135
+msgid "Range"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:143
+msgid "Effect chance"
+msgstr "効果率"
+
+#: veekun_pokedex/templates/move.mako:149
+msgid "n/a"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:152
+msgid "Priority"
+msgstr "優先度"
+
+#: veekun_pokedex/templates/move.mako:160
+#: veekun_pokedex/templates/pokemon.mako:515
+msgid "Effect"
+msgstr "効果"
+
+#: veekun_pokedex/templates/move.mako:169
+msgid "Mechanics"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:262
+msgid "Related moves"
+msgstr "関係のわざ"
+
+#: veekun_pokedex/templates/move.mako:267
+#: veekun_pokedex/templates/pokemon.mako:375
+msgid "Flavor"
+msgstr "持ち味"
+
+#: veekun_pokedex/templates/move.mako:269
+#: veekun_pokedex/templates/move.mako:321
+#: veekun_pokedex/templates/move.mako:344
+#: veekun_pokedex/templates/pokemon.mako:462
+msgid "Flavor text"
+msgstr "説明文"
+
+#: veekun_pokedex/templates/move.mako:280
+#: veekun_pokedex/templates/pokemon.mako:449
+msgid "Names"
+msgstr "名前"
+
+#: veekun_pokedex/templates/move.mako:304
+msgid "Contests"
+msgstr "コンテスト"
+
+#: veekun_pokedex/templates/move.mako:311
+msgid "Contest"
+msgstr "コンテスト"
+
+#: veekun_pokedex/templates/move.mako:317
+#: veekun_pokedex/templates/move.mako:342
+msgid "Appeal"
+msgstr "アピール"
+
+#: veekun_pokedex/templates/move.mako:319
+msgid "Jam"
+msgstr "妨害"
+
+#: veekun_pokedex/templates/move.mako:325
+#: veekun_pokedex/templates/move.mako:348
+msgid "Use after"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:327
+#: veekun_pokedex/templates/move.mako:350
+msgid "Use before"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:336
+msgid "Super Contest"
+msgstr "スーパーコンテスト"
+
+#: veekun_pokedex/templates/move.mako:361
+#: veekun_pokedex/templates/pokemon.mako:21
+msgid "Pokémon"
+msgstr "ポケモン"
+
+#: veekun_pokedex/templates/move.mako:367
+msgid "External links"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:371
+msgid "Azure Heights"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:373
+msgid "Bulbapedia"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:374
+msgid "Legendary Pokémon"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:375
+msgid "PsyPoke"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:376
+msgid "Serebii.net"
+msgstr ""
+
+#: veekun_pokedex/templates/move.mako:377
+msgid "Smogon"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:7
+msgid "Pokémon #{id}"
+msgstr "ポケモン #{id}"
+
+#: veekun_pokedex/templates/pokemon.mako:50
+msgid "Name"
+msgstr "名前"
+
+#: veekun_pokedex/templates/pokemon.mako:67
+msgid "Abilities"
+msgstr "とくせい"
+
+#: veekun_pokedex/templates/pokemon.mako:72
+msgid "Hidden ability"
+msgstr "夢とくせい"
+
+#: veekun_pokedex/templates/pokemon.mako:74
+msgid "Ability {n}"
+msgstr "とくせい {n}"
+
+#: veekun_pokedex/templates/pokemon.mako:113
+msgid "Immune"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:115
+msgid "Very resistant"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:117
+msgid "Resistant"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:120
+msgid "Vulnerable"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:122
+msgid "Very vulnerable"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:127
+msgid "Stats"
+msgstr "種族値"
+
+#: veekun_pokedex/templates/pokemon.mako:132
+msgid "abhorrent"
+msgstr "さいてい"
+
+#: veekun_pokedex/templates/pokemon.mako:134
+msgid "terrible"
+msgstr "おそるべき"
+
+#: veekun_pokedex/templates/pokemon.mako:136
+msgid "bad"
+msgstr "わるい"
+
+#: veekun_pokedex/templates/pokemon.mako:138
+msgid "incredible"
+msgstr "うそのよう"
+
+#: veekun_pokedex/templates/pokemon.mako:140
+msgid "awesome"
+msgstr "すごい"
+
+#: veekun_pokedex/templates/pokemon.mako:142
+msgid "good"
+msgstr "いい"
+
+#: veekun_pokedex/templates/pokemon.mako:144
+msgid "okay"
+msgstr "まあまあ"
+
+#: veekun_pokedex/templates/pokemon.mako:164
+msgid "Total"
+msgstr "総計"
+
+#: veekun_pokedex/templates/pokemon.mako:175
+msgid "Breeding"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:177
+msgid "Gender"
+msgstr "性別"
+
+#: veekun_pokedex/templates/pokemon.mako:185
+msgid "Egg groups"
+msgstr "タマゴグループ"
+
+#: veekun_pokedex/templates/pokemon.mako:201
+msgid "Training"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:203
+msgid "Effort yield"
+msgstr "獲得努力値"
+
+#: veekun_pokedex/templates/pokemon.mako:212
+msgid "EXP yield"
+msgstr "基礎経験値"
+
+#: veekun_pokedex/templates/pokemon.mako:220
+msgid "Catch rate"
+msgstr "捕捉率"
+
+#: veekun_pokedex/templates/pokemon.mako:226
+msgid "Initial friendship"
+msgstr "初期なつき度"
+
+#: veekun_pokedex/templates/pokemon.mako:232
+msgid "Growth rate"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:274
+#, fuzzy
+msgid "Wild held items"
 msgstr "持ち物"
 
-#: veekun_pokedex/templates/pokemon.mako:333
+#: veekun_pokedex/templates/pokemon.mako:310
 msgid "Evolution"
 msgstr "進化"
 
-#: veekun_pokedex/templates/pokemon.mako:567
+#: veekun_pokedex/templates/pokemon.mako:320
+msgid "Baby"
+msgstr "赤ちゃん"
+
+#: veekun_pokedex/templates/pokemon.mako:321
+msgid "Basic"
+msgstr "たね"
+
+#: veekun_pokedex/templates/pokemon.mako:322
+msgid "Stage 1"
+msgstr "1進化"
+
+#: veekun_pokedex/templates/pokemon.mako:323
+msgid "Stage 2"
+msgstr "2進化"
+
+#: veekun_pokedex/templates/pokemon.mako:357
+msgid "Either parent must hold "
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:397
+msgid "Genus"
+msgstr "分類"
+
+#: veekun_pokedex/templates/pokemon.mako:398
+msgid "{genus} Pokémon"
+msgstr "{genus}ポケモン"
+
+#: veekun_pokedex/templates/pokemon.mako:399
+msgid "Primary color"
+msgstr "原色"
+
+#: veekun_pokedex/templates/pokemon.mako:401
+msgid "Cry"
+msgstr "鳴声"
+
+#: veekun_pokedex/templates/pokemon.mako:413
+msgid "Habitat"
+msgstr "原産"
+
+#: veekun_pokedex/templates/pokemon.mako:422
+msgid "Footprint"
+msgstr "足跡"
+
+#: veekun_pokedex/templates/pokemon.mako:424
+msgid "Body shape"
+msgstr "格好"
+
+#: veekun_pokedex/templates/pokemon.mako:435
+msgid "Pokédex numbers"
+msgstr ""
+
+#: veekun_pokedex/templates/pokemon.mako:471
+msgid "Size"
+msgstr "大きさ"
+
+#: veekun_pokedex/templates/pokemon.mako:474
+msgid "Appearance"
+msgstr "見た目"
+
+#: veekun_pokedex/templates/pokemon.mako:486
 msgid "Moves"
 msgstr "わざ"
+
+#: veekun_pokedex/templates/pokemon.mako:508
+msgid "Move"
+msgstr "わざ"
+
+#: veekun_pokedex/templates/pokemon.mako:510
+msgid "Class"
+msgstr "分類"
+
+#: veekun_pokedex/templates/pokemon.mako:513
+msgid "Acc"
+msgstr "命中率"
+
+#: veekun_pokedex/templates/pokemon.mako:514
+msgid "Pri"
+msgstr "優先度"
+
+#: veekun_pokedex/templates/pokemon.mako:570
+msgid "Outside references"
+msgstr ""
 

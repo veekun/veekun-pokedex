@@ -49,6 +49,16 @@
     width: 32px;
 }
 
+.missing-translation {
+    font-size: 0.9em;
+    margin: 0 0 1em;
+    padding: 1em;
+
+    border: 1px solid hsl(225, 30%, 80%);
+    background: hsl(225, 30%, 90%);
+}
+
+
 ////// TABLES
 table.table-pretty {
     // TODO this doesn't do nested tables very well, but >tbody breaks thead

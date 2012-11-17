@@ -77,32 +77,6 @@ body {
         }
     }
 
-    .subsections {
-        display: none;
-        position: absolute;  // TODO floats instead?
-        bottom: 0;
-        left: 24em;
-
-        border: 1px solid hsl(36, 20%, 80%);
-
-        > li {
-            float: left;
-            margin: 1px;
-
-            > a,
-            > .-selected {
-                display: block;
-                padding: 0.33em 1em;
-            }
-            > a {
-            }
-            > .-selected {
-                background: white;
-                background: hsl(36, 20%, 80%);
-            }
-        }
-    }
-
     .prev-next {
         position: absolute;
         top: 0;

@@ -4,7 +4,7 @@
 
 ## TODO: everywhere there's a species.name needs fixing for forms
 
-<%block name="title">${species.name} [Pokemon #${species.id}] - veekun</%block>
+<%block name="title">${species.name} [${_(u"Pokémon #{id}").format(id=species.id)}] - veekun</%block>
 
 ## XXX surely the name should be a header of some kind?  should this be a header too, instead of nav?
 <%block name="subnav">
@@ -13,17 +13,12 @@
         <div class="eyeball-crop">${lib.pokemon_sprite(species)}</div>
         <div class="name">${species.name}</div>
     </div>
-    <ul class="subsections">
-        <li><span class="-selected">main</span></li>
-        <li><a href="flavor">flavor</a></li>
-        <li><a href="locations">locations</a></li>
-    </ul>
     ${lib.prev_next(species)}
 </nav>
 <nav id="breadcrumbs">
     <ol>
         <li><a href="/">veekun</a></li>
-        <li><a href="/">Pokémon</a></li>
+        <li><a href="/">${_(u"Pokémon")}</a></li>
         <li>
             <span class="icon-eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/icons/${species.id}.png"></span>
             ${species.name}
@@ -44,28 +39,21 @@
 
 
 <section>
-    <h1>${_(u'Essentials')}</h1>
-
-    <!-- nececssary...? -->
-    <!--
-    <div class="page-portrait">
-        <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.id}.png">
-    </div>
-    -->
+    <h1>${_(u"Essentials")}</h1>
 
     <div class="columns">
         <section class="col4">
-            <h2>${_(u'Overview')}</h2>
+            <h2>${_(u"Overview")}</h2>
 
             <dl class="horizontal">
                 XXX forms
-                <dt>Name</dt>
+                <dt>${_(u"Name")}</dt>
                 <dd>${species.name}</dd>
                 <dt>Introduced in</dt>
                 <dd>${lib.generation_icon(species.generation)}</dd>
                 <dt>National Dex</dt>
                 <dd># ${species.id}</dd>
-                <dt>Type</dt>
+                <dt>${_(u"Type")}</dt>
                 <dd>
                     % for type_ in pokemon.types:
                     ${lib.type_icon(type_)}
@@ -76,22 +64,19 @@
 
         <div class="col6">
             <section>
-                <h2>Abilities</h2>
+                <h2>${_(u"Abilities")}</h2>
                 <dl class="horizontal">
                     % for pokemon_ability in pokemon.pokemon_abilities:
                     <dt>
                         % if pokemon_ability.is_dream:
-                        Hidden ability
+                        ${_(u"Hidden ability")}
                         % else:
-                        Ability ${pokemon_ability.slot}
+                        ${_(u"Ability {n}").format(n=pokemon_ability.slot)}
                         % endif
                     </dt>
                     <dd>
                         <a href="${request.resource_url(pokemon_ability.ability)}">${pokemon_ability.ability.name}</a> —
-                        ## TODO markdown
-                        ##${pokemon_ability.ability.short_effect}
-                        ## TODO doesn't exist in ja
-                        ${pokemon_ability.ability.prose_local.short_effect}
+                        ${lib.render_markdown(pokemon_ability.ability, 'short_effect')}
                     </dd>
                     % endfor
                 </dl>
@@ -139,21 +124,25 @@
             </dl>
         </section>
         <section class="col6">
-            <h2>Stats</h2>
+            <h2>${_(u"Stats")}</h2>
             <%def name="stats_cell(percentile)">
                 <div class="statsbar" title="Better than ${int(percentile * 100 + 0.5)}% of Pokémon">
-                    <div class="statsbar-bar" style="width: ${percentile * 100}%; background-color: hsl(${percentile * 360}, 70%, 83%);">
-                        % if percentile < 0.1:
-                        terrible
-                        % elif percentile < 0.3:
-                        bad
-                        % elif percentile > 0.9:
-                        awesome
-                        % elif percentile > 0.7:
-                        good
-                        % else:
-                        okay
-                        % endif
+                    <div class="statsbar-bar" style="width: ${percentile * 100}%; background-color: hsl(${percentile * 330}, 70%, 83%);">
+                      % if percentile < 0.01:
+                        ${_(u"abhorrent")}
+                      % elif percentile < 0.1:
+                        ${_(u"terrible")}
+                      % elif percentile < 0.3:
+                        ${_(u"bad")}
+                      % elif percentile > 0.99:
+                        ${_(u"incredible")}
+                      % elif percentile > 0.9:
+                        ${_(u"awesome")}
+                      % elif percentile > 0.7:
+                        ${_(u"good")}
+                      % else:
+                        ${_(u"okay")}
+                      % endif
                     </div>
                 </div>
             </%def>
@@ -183,9 +172,9 @@
 
     <div class="columns">
         <section class="col6">
-            <h2>Breeding</h2>
+            <h2>${_(u"Breeding")}</h2>
             <dl class="horizontal">
-                <dt>Gender</dt>
+                <dt>${_(u"Gender")}</dt>
                 <dd>
                     <div class="gender-container">
                         <span class="-male">⅞ male</span>
@@ -193,7 +182,7 @@
                         <div class="gender-bar" data-male="7"></div>
                     </div>
                 </dd>
-                <dt>Egg groups</dt>
+                <dt>${_(u"Egg groups")}</dt>
                 <dd>
                     ground
                     <br><a href="...">Compatible partners</a>
@@ -209,9 +198,9 @@
 
 
         <section class="col6">
-            <h2>Training</h2>
+            <h2>${_(u"Training")}</h2>
             <dl class="horizontal">
-                <dt>Effort</dt>
+                <dt>${_(u"Effort yield")}</dt>
                 <dd>
                     % for pokemon_stat in pokemon.stats:
                     % if pokemon_stat.effort:
@@ -220,7 +209,7 @@
                     % endfor
                 </dd>
 
-                <dt>Base EXP</dt>
+                <dt>${_(u"EXP yield")}</dt>
                 <dd>
                     ${pokemon.base_experience}
                     <div class="microbar"><div class="microbar-bar" style="width: ${pokemon.base_experience * 100. / 255}%;"></div></div>
@@ -228,21 +217,22 @@
                 XXX calculator
                 </dd>
 
-                <dt>Capture rate</dt>
+                <dt>${_(u"Catch rate")}</dt>
                 <dd>
                     ${species.capture_rate}
                     <div class="microbar"><div class="microbar-bar" style="width: ${species.capture_rate * 100. / 255}%;"></div></div>
                 </dd>
 
-                <dt>Base happiness</dt>
+                <dt>${_(u"Initial friendship")}</dt>
                 <dd>
                     ${species.base_happiness}
                     <div class="microbar"><div class="microbar-bar" style="width: ${species.base_happiness * 100. / 255}%;"></div></div>
                 </dd>
 
-                <dt>Growth rate</dt>
+                <dt>${_(u"Growth rate")}</dt>
                 <dd>
-                    ${species.growth_rate.name} <br>
+                    ## XXX japanese names oh no!
+                    ${species.growth_rate.identifier} <br>
 
                     ## Courtesy of magical!  Graphs level² vs exp.
                     <style type="text/css">
@@ -281,7 +271,7 @@
     </div>
 
     <section>
-        <h2>${_(u'Wild held items')}</h2>
+        <h2>${_(u"Wild held items")}</h2>
 
         <table class="table-pretty" style="width: auto;">
         <col>
@@ -317,7 +307,7 @@
 ## evolution
 <section>
     <header>
-        <h1 id="evolution">${_(u'Evolution')}</h1>
+        <h1 id="evolution">${_(u"Evolution")}</h1>
         <div class="doorhanger">
             <a href="...">Compare this family</a>
             ## XXX: hey, don't show that link if there's only one pokemon...
@@ -382,7 +372,7 @@
 ## flavor
 <section>
     <header>
-        <h1>Flavor</h1>
+        <h1>${_(u"Flavor")}</h1>
         <div class="doorhanger">
             <a href="...">Complete flavor for other languages, older games</a>
         </div>
@@ -402,13 +392,13 @@
     ## XXX needs more internal ids too
     <div class="columns">
         <section class="col4">
-            <h2>taxonomy</h2>
+            <h2>Taxonomy</h2>
             <dl class="horizontal">
-                <dt>Genus</dt>
-                <dd>${pokemon.species.genus} Pokémon</dd>
-                <dt>Primary color</dt>
+                <dt>${_(u"Genus")}</dt>
+                <dd>${_(u"{genus} Pokémon").format(genus=pokemon.species.genus)}</dd>
+                <dt>${_(u"Primary color")}</dt>
                 <dd>${pokemon.species.color.name}</dd>
-                <dt>Cry</dt>
+                <dt>${_(u"Cry")}</dt>
                 <dd>
                     <audio src="http://veekun.com/dex/media/pokemon/cries/${pokemon.id}.ogg" controls preload="auto" class="cry" style="width: 10em; height: 3em;">
                         <!-- Totally the best fallback -->
@@ -420,19 +410,21 @@
                         $cry.hide();
                     </script>
                 </dd>
-                <dt>Habitat</dt>
+                <dt>${_(u"Habitat")}</dt>
                 <dd>
                   % if pokemon.species.habitat:
-                    ${pokemon.species.habitat.name}
+                    ## XXX japanese names
+                    ${pokemon.species.habitat.identifier}
                   % else:
                     —
                   % endif
                 </dd>
-                <dt>Footprint</dt>
+                <dt>${_(u"Footprint")}</dt>
                 <dd><img src="http://veekun.com/dex/media/pokemon/footprints/${pokemon.id}.png" class="footprint"></dd>
-                <dt>Shape</dt>
+                <dt>${_(u"Body shape")}</dt>
                 <dd>
-                    ${pokemon.species.shape.awesome_name} <br>
+                    ## XXX japanese awesome names...
+                    ${pokemon.species.shape.identifier} <br>
                     <img src="http://veekun.com/dex/media/shapes/${pokemon.species.shape.identifier}.png">
                 </dd>
             </dl>
@@ -440,12 +432,13 @@
 
         <section class="col4">
         XXX game indices
-            <h2>pokédex numbers</h2>
+            <h2>${_(u"Pokédex numbers")}</h2>
             <dl class="horizontal">
                 <!-- XXX ugh why is this in this list -->
                 <!-- TODO put the uh icons but as tooltip things i guess -->
                 % for dex_number in pokemon.species.dex_numbers:
-                <dt>${dex_number.pokedex.name}</dt>
+                ## XXX japanese names...
+                <dt>${dex_number.pokedex.identifier}</dt>
                 <dd>${dex_number.pokedex_number}</dd>
                 ## TODO dex_number.pokedex.version_groups
                 % endfor
@@ -453,7 +446,7 @@
         </section>
 
         <section class="col4">
-            <h2>names</h2>
+            <h2>${_(u"Names")}</h2>
             <dl class="horizontal">
                 % for language, pokemon_name in pokemon.species.names.iteritems():
                 ## TODO care about official?
@@ -466,7 +459,7 @@
 
 
 
-    <h2>Flavor text</h2>
+    <h2>${_(u"Flavor text")}</h2>
     <p>DP: A rare Pokémon that adapts to harsh environments by taking on different evolutionary forms.</p>
     <p>P: Because its genetic makeup is irregular, it quickly changes its form due to a variety of causes.</p>
     <p>HG: It has the ability to alter the composition of its body to suit its surrounding environment.</p>
@@ -475,10 +468,10 @@
     <p>BW: Because its genetic makeup is irregular, it quickly changes its form due to a variety of causes.</p>
 
 
-    <h2>Size</h2>
+    <h2>${_(u"Size")}</h2>
     <img src="http://veekun.com/static/pokedex/images/trainer-male.png">
 
-    <h2>Appearance</h2>
+    <h2>${_(u"Appearance")}</h2>
 </section>
 
 
@@ -490,7 +483,7 @@
 
 ## moves
 <section>
-    <h1>${_(u'Moves')}</h1>
+    <h1>${_(u"Moves")}</h1>
 
     <table class="table-pretty">
         <col class="-version">
@@ -512,14 +505,14 @@
               % for column, span in move_table.column_headers:
                 <th colspan="${span}">${lib.any_version_icon(column)}</th>
               % endfor
-                <th>Move</th>
-                <th>Type</th>
-                <th>Class</th>
-                <th>PP</th>
-                <th>Power</th>
-                <th>Acc</th>
-                <th>Pri</th>
-                <th>Effect</th>
+                <th>${_(u"Move")}</th>
+                <th>${_(u"Type")}</th>
+                <th>${_(u"Class")}</th>
+                <th>${_(u"PP")}</th>
+                <th>${_(u"Power")}</th>
+                <th>${_(u"Acc")}</th>
+                <th>${_(u"Pri")}</th>
+                <th>${_(u"Effect")}</th>
             </tr>
             <tr class="subheader">
                 <th colspan="99">~~~ ${move_method.identifier} ~~~</th>
@@ -574,7 +567,7 @@
 ## links
 
 <section>
-    <h1>Outside references</h1>
+    <h1>${_(u"Outside references")}</h1>
 
     <nav>
         <ul>

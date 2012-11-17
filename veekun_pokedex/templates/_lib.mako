@@ -32,7 +32,8 @@
 
 <%def name="contest_type_icon(type_)">
     ## XXX i18n
-    <img src="http://veekun.com/dex/media/contest-types/en/${type_.identifier}.png" title="${type_.name}" alt="${type_.name}">
+    ## XXX should be using name for title+alt
+    <img src="http://veekun.com/dex/media/contest-types/en/${type_.identifier}.png" title="${type_.identifier}" alt="${type_.identifier}">
 </%def>
 
 
@@ -42,7 +43,8 @@
 <%def name="version_icon(version)">\
 ## Ruby → R, HeartGold → HG, Black 2 → B2
 ## TODO: how does this play with other languages
-<span class="version-${version.identifier}">${version_initials(version.name)}</span>\
+## XXX switched to identifier because this is completely broken in every language wow.
+<span class="version-${version.identifier}">${version_initials(version.identifier)}</span>\
 </%def>
 
 <%def name="generation_icon(generation)">${generation_icon_by_id(generation.id)}</%def>
@@ -73,6 +75,7 @@
 
 <%def name="prev_next(obj)">
     <%
+        # XXX this should go by name for everything but pokémon.  fuck.  do we have 'order' on all the relevant tables maybe?
         # XXX this should perhaps not live in a template
         from sqlalchemy.orm import object_session
         sess = object_session(obj)
@@ -136,6 +139,30 @@
 ################################################################################
 ## Misc UI-y stuff
 
+## Renders a block of Markdown from the database.
+## Call me with a row and column name SEPARATELY, so I can handle language
+## fallback for you if we don't have this particular text translated yet.
+<%def name="render_markdown(row, relation)">
+## XXX with the way this is set up, pokedex lib will do the markdowning for us,
+## which makes it hard for the linkifier to find the request.
+<% local = getattr(row, relation, None) %>
+% if local:
+    ${local}
+% else:
+    <p class="missing-translation">
+        ${_(u"Sorry, we haven't translated this into your language yet!  "
+            u"Here's the original English.  (If you can help translate, let us know!)")}
+    </p>
+    <%
+        # XXX uhm how do i get the default language
+        from veekun_pokedex.model import session
+        import pokedex.db.tables as t
+        english = session.query(t.Language).get(9)
+    %>
+    ${getattr(row, relation + '_map')[english]}
+% endif
+</%def>
+
 <%def name="evolution_description(evolution)"><%
 
     from mako.runtime import capture
@@ -186,8 +213,9 @@
         w(_(u"starting at level {0}").format(evolution.minimum_level))
     if evolution.location_id:
         # TODO link
+        # TODO japanese names!
         w((_(u"around {0}")).format(
-            evolution.location.name))
+            evolution.location.identifier))
     if evolution.held_item_id:
         w((_(u"while holding {article} {item}")).format(
             article=article(evolution.held_item.name),
