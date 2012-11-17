@@ -25,6 +25,16 @@
     <img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${species.id}.png">
 </%def>
 
+<%def name="damage_class_icon(class_)">
+    ## XXX i18n
+    <img src="http://veekun.com/dex/media/damage-classes/${class_.identifier}.png" title="${class_.name}: ${class_.description}">
+</%def>
+
+<%def name="contest_type_icon(type_)">
+    ## XXX i18n
+    <img src="http://veekun.com/dex/media/contest-types/en/${type_.identifier}.png" title="${type_.name}" alt="${type_.name}">
+</%def>
+
 
 ################################################################################
 ## Versions, version groups, and generations
@@ -60,6 +70,45 @@
 
 ################################################################################
 ## Large chunks of pages
+
+<%def name="prev_next(obj)">
+    <%
+        # XXX this should perhaps not live in a template
+        from sqlalchemy.orm import object_session
+        sess = object_session(obj)
+        cls = type(obj)
+        prev_obj = sess.query(cls).get(obj.id - 1)
+        next_obj = sess.query(cls).get(obj.id + 1)
+    %>
+    <ol class="prev-next">
+      % if prev_obj:
+        <li class="prev">
+            <a href="${request.resource_url(prev_obj)}">
+                <div class="wedge"></div>
+                <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${prev_obj.id}.png"></div>
+                <div class="name">${prev_obj.name}</div>
+            </a>
+        </li>
+      % else:
+        <li class="prev -empty">
+            <div class="wedge"></div>
+        </li>
+      % endif
+      % if next_obj:
+        <li class="next">
+            <a href="${request.resource_url(next_obj)}">
+                <div class="name">${next_obj.name}</div>
+                <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${next_obj.id}.png"></div>
+                <div class="wedge"></div>
+            </a>
+        </li>
+      % else:
+        <li class="next -empty">
+            <div class="wedge"></div>
+        </li>
+      % endif
+    </ol>
+</%def>
 
 <%def name="names_list(name_mapping)">
     <dl class="horizontal">

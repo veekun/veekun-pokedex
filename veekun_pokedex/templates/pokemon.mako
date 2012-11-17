@@ -18,22 +18,7 @@
         <li><a href="flavor">flavor</a></li>
         <li><a href="locations">locations</a></li>
     </ul>
-    <ol class="prev-next">
-        <li class="prev">
-        <a href="ditto">
-            <div class="wedge"></div>
-            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${species.id - 1}.png"></div>
-            <div class="name">XXX</div>
-        </a>
-        </li>
-        <li class="next">
-        <a href="vaporeon">
-            <div class="name">XXX</div>
-            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${species.id + 1}.png"></div>
-            <div class="wedge"></div>
-        </a>
-        </li>
-    </ol>
+    ${lib.prev_next(species)}
 </nav>
 <nav id="breadcrumbs">
     <ol>
@@ -436,7 +421,13 @@
                     </script>
                 </dd>
                 <dt>Habitat</dt>
-                <dd>${pokemon.species.habitat.name}</dd>
+                <dd>
+                  % if pokemon.species.habitat:
+                    ${pokemon.species.habitat.name}
+                  % else:
+                    —
+                  % endif
+                </dd>
                 <dt>Footprint</dt>
                 <dd><img src="http://veekun.com/dex/media/pokemon/footprints/${pokemon.id}.png" class="footprint"></dd>
                 <dt>Shape</dt>

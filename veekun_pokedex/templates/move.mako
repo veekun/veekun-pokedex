@@ -10,22 +10,7 @@
         <div class="eyeball-crop">${'xxx sprite'}</div>
         <div class="name">${move.name}</div>
     </div>
-    <ol class="prev-next">
-        <li class="prev">
-        <a href="ditto">
-            <div class="wedge"></div>
-            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${move.id - 1}.png"></div>
-            <div class="name">XXX</div>
-        </a>
-        </li>
-        <li class="next">
-        <a href="vaporeon">
-            <div class="name">XXX</div>
-            <div class="eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${move.id + 1}.png"></div>
-            <div class="wedge"></div>
-        </a>
-        </li>
-    </ol>
+    ${lib.prev_next(move)}
 </nav>
 <nav id="breadcrumbs">
     <ol>
@@ -297,6 +282,22 @@
     XXX internal ids!
 </section>
 
+<%def name="contest_hearts(ch, n)">
+    ${n} ${ch * n}
+</%def>
+
+<%def name="contest_moves(combo_moves)">
+  % if combo_moves:
+    <ul class="inline-commas">
+      % for combo_move in move.super_contest_combo_next:
+        <li><a href="${request.resource_url(combo_move)}">${combo_move.name}</a></li>
+      % endfor
+    </ul>
+  % else:
+    —
+  % endif
+</%def>
+
 % if move.contest_effect or move.super_contest_effect:
 <section>
     <h1>${_(u'Contests')}</h1>
@@ -305,80 +306,46 @@
 
     % if move.contest_effect:
     <div class="col6">
-        <h2>${lib.generation_icon_by_id(3)} ${_(u'Contest')}</h2>
+        <h2>
+            ${_(u"Contest")}
+            <span class="postscript">only in ${lib.generation_icon_by_id(3)}</span>
+        </h2>
         <dl class="horizontal">
             <dt>${_(u"Type")}</dt>
-            ##<dd>${h.pokedex.pokedex_img('contest-types/{1}/{0}.png'.format(move.contest_type.identifier, c.game_language.identifier), alt=move.contest_type.name)}</dd>
+            <dd>${lib.contest_type_icon(move.contest_type)}</dd>
             <dt>${_(u"Appeal")}</dt>
-            <dd title="${move.contest_effect.appeal}">${u'♡' * move.contest_effect.appeal}</dd>
+            <dd>${contest_hearts(u'♡', move.contest_effect.appeal)}</dd>
             <dt>${_(u"Jam")}</dt>
-            <dd title="${move.contest_effect.jam}">${u'♥' * move.contest_effect.jam}</dd>
+            <dd>${contest_hearts(u'♥', move.contest_effect.jam)}</dd>
             <dt>${_(u"Flavor text")}</dt>
             <dd>${move.contest_effect.flavor_text}</dd>
 
             <dt>${_(u"Use after")}</dt>
-            <dd>
-                % if move.contest_combo_prev:
-                <ul class="inline-commas">
-                    % for combo_move in move.contest_combo_prev:
-                    <li><a href="${request.resource_url(combo_move)}">${combo_move.name}</a></li>
-                    % endfor
-                </ul>
-                % else:
-                None
-                % endif
-            </dd>
+            <dd>${contest_moves(move.contest_combo_prev)}</dd>
             <dt>${_("Use before")}</dt>
-            <dd>
-                % if move.contest_combo_next:
-                <ul class="inline-commas">
-                    % for combo_move in move.contest_combo_next:
-                    <li><a href="${request.resource_url(combo_move)}">${combo_move.name}</a></li>
-                    % endfor
-                </ul>
-                % else:
-                None
-                % endif
-            </dd>
+            <dd>${contest_moves(move.contest_combo_next)}</dd>
         </dl>
     </div>
     % endif
 
     % if move.super_contest_effect:
     <div class="col6">
-        <h2>${lib.generation_icon_by_id(4)} ${_(u"Super Contest")}</h2>
+        <h2>
+            ${_(u"Super Contest")}
+            <span class="postscript">only in ${lib.generation_icon_by_id(4)}</span>
+        </h2>
         <dl class="horizontal">
             <dt>${_("Type")}</dt>
-            ##<dd>${h.pokedex.pokedex_img('contest-types/{1}/{0}.png'.format(move.contest_type.identifier, c.game_language.identifier), alt=move.contest_type.name)}</dd>
+            <dd>${lib.contest_type_icon(move.contest_type)}</dd>
             <dt>${_("Appeal")}</dt>
-            <dd title="${move.super_contest_effect.appeal}">${u'♡' * move.super_contest_effect.appeal}</dd>
+            <dd>${contest_hearts(u'♡', move.super_contest_effect.appeal)}</dd>
             <dt>${_("Flavor text")}</dt>
             <dd>${move.super_contest_effect.flavor_text}</dd>
 
             <dt>${_("Use after")}</dt>
-            <dd>
-                % if move.super_contest_combo_prev:
-                <ul class="inline-commas">
-                    % for combo_move in move.super_contest_combo_prev:
-                    <li><a href="${request.resource_url(combo_move)}">${combo_move.name}</a></li>
-                    % endfor
-                </ul>
-                % else:
-                None
-                % endif
-            </dd>
+            <dd>${contest_moves(move.super_contest_combo_prev)}</dd>
             <dt>${_("Use before")}</dt>
-            <dd>
-                % if move.super_contest_combo_next:
-                <ul class="inline-commas">
-                    % for combo_move in move.super_contest_combo_next:
-                    <li><a href="${request.resource_url(combo_move)}">${combo_move.name}</a></li>
-                    % endfor
-                </ul>
-                % else:
-                None
-                % endif
-            </dd>
+            <dd>${contest_moves(move.super_contest_combo_next)}</dd>
         </dl>
     </div>
     % endif

@@ -181,7 +181,7 @@ col.-version {
 
 // XXX this is gross ok
 // Type icons should align their own text approximately to the baseline
-img[src*="/types/"] {
+img[src*="types/"] {
     vertical-align: -3px;
 }
 
