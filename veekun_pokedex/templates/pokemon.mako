@@ -37,7 +37,6 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" async></script>
 
-
 <section>
     <h1>${_(u"Essentials")}</h1>
 
@@ -68,7 +67,7 @@
                 <dl class="horizontal">
                     % for pokemon_ability in pokemon.pokemon_abilities:
                     <dt>
-                        % if pokemon_ability.is_dream:
+                        % if pokemon_ability.is_hidden:
                         ${_(u"Hidden ability")}
                         % else:
                         ${_(u"Ability {n}").format(n=pokemon_ability.slot)}
