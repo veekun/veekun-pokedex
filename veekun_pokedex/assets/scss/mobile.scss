@@ -1,3 +1,7 @@
+////////////////////////////////////////////////////////////////////////////////
+// Smaller than most monitors -- probably a tablet in landscape?
+// Try to eke out a wee bit more space
+
 @media screen and (max-width: 960px) {
     body {
         background-image: url(/images/noise2.png);
@@ -56,7 +60,74 @@
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Slightly low on space; really wide things need to start adjusting
+
+@media screen and (max-width: 720px) {
+    // Shrink down the prev/next links and stack them atop each other
+    #subnav .prev-next {
+        right: 1em;
+
+        > li.prev,
+        > li.next {
+            display: block;
+            height: 22px;
+            margin: 1px 0;
+
+            .name {
+                top: 0;
+                bottom: 0;
+                padding: 0 0.33em;
+                line-height: 22px;
+            }
+        }
+
+        > li.prev .wedge {
+            left: -11px;
+            border-width: 11px 11px 11px 0;
+        }
+
+        > li.next .wedge {
+            right: -11px;
+            border-width: 11px 0 11px 11px;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Getting pretty cramped here.  Tablet in portrait, phone in landscape
+
+@media screen and (max-width: 480px) {
+    // Give up on columns entirely.
+    // TODO it would be nice to get all clever and make skinny columns remain
+    // as columns, but i don't think that's likely to work too well
+    .columns {
+        > div,
+        > section {
+            float: none;
+            margin: 0 0 1em;
+            width: auto !important;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Approximately a phone
+
 @media screen and (max-width: 360px) {
+
+    // <dl> can no longer be horizontal; eats way too much space
+    dl.horizontal {
+        dt {
+            float: none;
+            width: auto;
+            text-align: left;
+            margin-bottom: 0;
+        }
+        dd {
+            margin-left: 1em;
+        }
+    }
     // Index
     .home-tiles {
         font-size: 1.5em;
