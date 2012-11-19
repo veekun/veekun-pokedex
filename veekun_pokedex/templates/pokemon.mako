@@ -446,26 +446,25 @@
 
         <section class="col4">
             <h2>${_(u"Names")}</h2>
-            <dl class="horizontal">
-                % for language, pokemon_name in pokemon.species.names.iteritems():
-                ## TODO care about official?
-                <dt>${language.name}</dt>
-                <dd>${pokemon_name.name}</dd>
-                % endfor
-            </dl>
+            ${lib.names_list(species.name_map)}
         </section>
     </div>
 
 
 
-    <h2>${_(u"Flavor text")}</h2>
-    <p>DP: A rare Pokémon that adapts to harsh environments by taking on different evolutionary forms.</p>
-    <p>P: Because its genetic makeup is irregular, it quickly changes its form due to a variety of causes.</p>
-    <p>HG: It has the ability to alter the composition of its body to suit its surrounding environment.</p>
-    <p>SS: Its irregularly configured DNA is affected by its surroundings. It evolves if its environment changes.</p>
+    <section>
+        <h2>${_(u"Flavor text")}</h2>
 
-    <p>BW: Because its genetic makeup is irregular, it quickly changes its form due to a variety of causes.</p>
-
+        ## TODO other languages?
+        ## XXX whoops this shows every language we've got lol
+        <dl class="horizontal">
+        % for flavor_text_row in species.flavor_text:
+            ## XXX blah blah better vg icons
+            <dt>${lib.any_version_icon(flavor_text_row.version)}</dt>
+            <dd>${flavor_text_row.flavor_text}</dd>
+        % endfor
+        </dl>
+    </section>
 
     <h2>${_(u"Size")}</h2>
     <img src="http://veekun.com/static/pokedex/images/trainer-male.png">
@@ -553,7 +552,7 @@
                     ⬇${row.key.priority}
                     % endif
                 </td>
-                <td>TODO</td>
+                <td>${lib.render_markdown(row.key, 'short_effect')}</td>
             </tr>
             % endfor
         </tbody>

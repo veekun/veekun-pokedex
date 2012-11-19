@@ -1,4 +1,5 @@
 // Stuff specific to Pokémon pages
+@import "archetype/lib/css3";
 
 // TODO move me when done
 table.standard-table {
@@ -58,24 +59,7 @@ table.pokemon-evolution-chart {
         }
 
         background-color: hsl(36, 0%, 96%);
-        -moz-transition: background-color linear 0.2s;
-    }
-    xxxtd.-selected {
-        // Border has to be on the cell, since the div may not fill its full
-        // height.  Take half of the div's padding for the border
-        border: 0.25em solid hsl(36, 30%, 70%);
-
-        > .td-absolute-wrapper {
-            padding: 0.25em;
-        }
-        .-sprite-wrapper {
-            right: -0.25em;
-            bottom: -0.25em;
-        }
-    }
-
-    td.-selected {
-        background-color: hsl(36, 20%, 90%);
+        @include transition(background-color linear 0.2s);
     }
 
 
@@ -91,12 +75,13 @@ table.pokemon-evolution-chart {
 
         > li {
             margin: 0.25em 0 0.25em 1em;
+            text-indent: -1em;
 
             &:before {
-                content: "» ";
-                display: block;
-                float: left;
-                margin-left: -1em;
+                content: "➜";
+                display: inline-block;
+                width: 1em;
+                text-indent: 0;
             }
         }
     }
@@ -111,25 +96,33 @@ table.pokemon-evolution-chart {
 
         img {
             margin: -16px -16px -32px 0;
-
             opacity: 0.6;
-            -moz-transition: opacity linear 0.2s;
+            @include transition(opacity linear 0.2s);
         }
     }
 
-    td.-selected img {
-        opacity: 1;
-    }
     td:hover {
-        background-color: hsl(36, 20%, 93%);
+        background: hsl(210, 50%, 92%);
+
+        img {
+            opacity: 1;
+        }
     }
-    td:hover img {
-        opacity: 1;
+
+    // Put this after the :hover so the selected cell doesn't get a hover
+    // effect
+    td.-selected {
+        background: hsl(36, 30%, 90%);
+
+        img {
+            opacity: 1;
+        }
     }
 
     td.-empty,
     td.-empty:hover {
-        background-color: hsl(36, 0%, 96%);
+        border: 2px solid hsl(36, 0%, 96%);
+        background: white;
     }
 }
 

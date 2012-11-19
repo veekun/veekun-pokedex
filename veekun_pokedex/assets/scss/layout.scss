@@ -266,7 +266,8 @@ h2 {
 // XXX split most of this into a mixin
 a {
     color: hsl(225, 90%, 50%);
-    @include transition(color linear 0.2s);
+    text-decoration: none;
+    @include transition(color linear 0.1s);
 
     &:visited {
         color: hsl(270, 90%, 50%);
@@ -274,6 +275,9 @@ a {
     &:hover,
     &:active {
         color: hsl(225, 90%, 25%);
+    }
+    &:hover {
+        text-decoration: underline;
     }
 }
 

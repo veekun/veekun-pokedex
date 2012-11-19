@@ -1,5 +1,4 @@
 // Stuff common to various Pokédex pages
-
 @import "archetype/lib/css3";
 
 .page-portrait {
@@ -182,10 +181,10 @@ col.-version {
 }
 // Other
 .version-colosseum {
-    background: hsl(270, 50%, 50%);
+    color: hsl(270, 50%, 50%);
 }
 .version-xd {
-    background: hsl(270, 50%, 50%);
+    color: hsl(270, 50%, 50%);
 }
 
 
