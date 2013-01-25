@@ -70,6 +70,7 @@ table.table-pretty {
         }
         &:hover {
             background: hsl(210, 50%, 92%);
+            background: hsla(210, 50%, 86%, 0.50);
         }
 
         &.header {
@@ -90,6 +91,23 @@ table.table-pretty {
             border-bottom: 1px solid hsl(36, 30%, 75%);
         }
     }
+}
+table.table-pretty.table-striped-bodies {
+
+    tbody {
+        tr {
+            &:nth-child(2n) {
+                background: transparent;
+            }
+        }
+    }
+
+    tbody:nth-child(2n) {
+            background: hsl(0, 0%, 96%);
+            background: hsla(0, 0%, 50%, 0.06);
+
+    }
+
 }
 
 col.-version {
@@ -228,5 +246,134 @@ img[src*="types/"] {
 
     &[data-male="7"] {
         @include gender-background(100% * 7/8);
+    }
+}
+
+
+////// ENCOUNTERS -- TODO probably lives elsewhere, TODO merge with evo chart
+
+table.encounter-strip {
+    table-layout: auto;
+
+    th {
+        font-size: 0.9em;
+        padding: 0.33em;
+        text-align: left;
+    }
+    th.-rarity-common {
+        color: hsl(120, 40%, 40%);
+        background: hsl(120, 40%, 80%);
+    }
+    th.-rarity-rare {
+        color: hsl(0, 40%, 40%);
+        background: hsl(0, 40%, 80%);
+    }
+
+    td.-rarity-common {
+        border-top: 2px solid hsl(120, 40%, 80%);
+    }
+    td.-rarity-rare {
+        border-top: 2px solid hsl(0, 40%, 80%);
+    }
+
+    td {
+        > .td-absolute-wrapper {
+            min-height: 24px !important;
+            -moz-box-sizing: border-box;
+            padding: 0 !important;
+        }
+    }
+    .-sprite-wrapper {
+        height: 24px !important;
+
+        img {
+            margin: -32px -16px -40px 0 !important;
+        }
+    }
+    p {
+        margin: 0;
+        font-size: 0.8em !important;
+    }
+}
+
+table.pokemon-encounter-table {
+    table-layout: fixed;
+
+    col.-col-version {
+        width: 12em;
+    }
+
+    th.encounter-pokemon {
+        overflow: hidden;
+        min-height: 24px;
+        padding: 0;
+
+        text-align: left;
+
+        a {
+            position: relative;
+            z-index: 1;
+            font-size: 1.2em;
+        }
+
+        > .td-absolute-wrapper {
+            padding: 0.33em;
+        }
+        .cell-sprite-peek {
+            position: absolute;
+            height: 48px;
+            width: 80px;
+            right: 0;
+            top: 0;
+
+            img {
+                margin: -24px -16px -24px 0;
+                opacity: 0.6;
+                @include transition(opacity linear 0.2s);
+            }
+        }
+    }
+
+    h4 {
+        position: relative;
+        z-index: 1;
+        //color: hsl(36, 20%, 48%);
+        color: black;
+        text-shadow:
+            1px 1px  1px white,
+            1px -1px  1px white,
+            -1px 1px  1px white,
+            -1px -1px  1px white;
+    }
+
+    .rarity {
+        font-size: 1.33em;
+        //width: 3em;
+        text-align: right;
+        vertical-align: middle;
+    }
+    .rarity-vermin {
+        color: hsl(225, 40%, 40%);
+    }
+    .rarity-common {
+        color: hsl(120, 40%, 40%);
+    }
+    .rarity-uncommon {
+        color: hsl(30, 40%, 40%);
+    }
+    .rarity-rare {
+        color: hsl(0, 40%, 40%);
+    }
+
+    .-level-range {
+        line-height: 133%;
+        vertical-align: middle;
+        color: hsl(36, 0%, 60%);
+    }
+
+    tr:hover {
+        .cell-sprite-peek img {
+            opacity: 1;
+        }
     }
 }

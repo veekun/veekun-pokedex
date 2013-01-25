@@ -54,6 +54,10 @@ class LanguageIndex(object):
 
 class PokedexIndex(object):
     table = None
+    parent_class = None
+
+    def __init__(self, parent_row=None):
+        self.parent_row = parent_row
 
     def __getitem__(self, key):
         # `key` should be a whatever name
@@ -61,11 +65,19 @@ class PokedexIndex(object):
             .join(self.table.names_local) \
             .filter(func.lower(self.table.names_table.name) == key)
 
+        if self.parent_row is not None:
+            q = q.with_parent(self.parent_row)
+
         try:
-            return q.one()
+            row = q.one()
         except NoResultFound:
             # TODO ought to do a 404 with lookup
             raise KeyError
+        else:
+            if self.parent_class:
+                return self.parent_class(row)
+            else:
+                return row
 
 class PokemonIndex(PokedexIndex):
     table = t.PokemonSpecies
@@ -85,6 +97,10 @@ class ItemIndex(PokedexIndex):
 class PlaceIndex(PokedexIndex):
     table = t.Location
 
+class RegionIndex(PokedexIndex):
+    table = t.Region
+    parent_class = PlaceIndex
+
 class NatureIndex(PokedexIndex):
     table = t.Nature
 
@@ -98,7 +114,7 @@ resource_root = dict(
     types = TypeIndex(),
     abilities = AbilityIndex(),
     items = ItemIndex(),
-    places = PlaceIndex(),
+    places = RegionIndex(),
     natures = NatureIndex(),
 )
 
@@ -119,6 +135,8 @@ class PokedexURLGenerator(object):
     implements(IResourceURL)
 
     def __init__(self, resource, request):
+        resource_chain = [resource]
+
         # TODO make this use adapters or whatever
         if isinstance(resource, t.Pokemon):
             prefix = 'pokemon'
@@ -130,11 +148,18 @@ class PokedexURLGenerator(object):
             prefix = 'types'
         elif isinstance(resource, t.Item):
             prefix = 'items'
+        elif isinstance(resource, t.Region):
+            prefix = 'places'
+        elif isinstance(resource, t.Location):
+            prefix = 'places'
+            resource_chain.insert(0, resource.region)
         elif isinstance(resource, t.Ability):
             prefix = 'abilities'
         else:
             raise TypeError(repr(resource))
 
-        self.virtual_path = u"/{0}/{1}/{2}".format(
-            request._LOCALE_, prefix, resource.name.lower())
+        self.virtual_path = u"/".join(
+            [u'', request._LOCALE_, prefix] +
+            [res.name.lower() for res in resource_chain]
+        )
         self.physical_path = self.virtual_path
