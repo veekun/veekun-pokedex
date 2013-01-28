@@ -1,4 +1,5 @@
 @import "archetype/lib/css3";
+@import "archetype/lib/util";
 
 #home-header {
     position: relative;
@@ -7,6 +8,8 @@
     font-size: 5em;
     font-weight: bold;
     color: hsl(30, 30%, 70%);
+    color: #ede9e4;
+    @include text-outline(rgba(#d6cec1, 0.7), $delta: 1px);
     margin: 0;
     line-height: 1;
 }

@@ -1,4 +1,6 @@
+@import "archetype/defs";
 @import "archetype/lib/css3";
+@import "archetype/lib/util";
 
 html {
     // This goes on html to make the rem unit work
@@ -22,32 +24,69 @@ body {
         top left;
 }
 
-#logo { display: none; } // XXX
 #header {
     color: white;
     background: hsl(225, 50%, 60%);
 }
+#logo {
+    float: left;
+    position: relative;
+    font-size: 1.66em;
+    padding: 0;
+    padding-left: 44px;  // micrologo size + breathing room
+    padding-right: 0.75em;  // space for the border
+
+    border-radius: 0 0.25em 0.1em 0 / 0 1em 0.5em 0;
+    line-height: 1;
+    background: url(/images/micrologo.png) bottom left no-repeat;
+    font-weight: bold;
+    color: hsl(225, 50%, 70%);
+    @include text-outline(hsla(225, 50%, 30%, 0.5));
+}
+#lookup {
+    float: right;
+    font-size: 0.8em;
+}
 #nav {
     // Put the box-shadow above the subnav
     position: relative;
-    z-index: 1;
-
+    z-index: 999;
     font-size: 1.33em;
-    background: hsl(225, 50%, 40%);
+    border-bottom: 1px solid hsl(225, 50%, 40%);
+
+    box-shadow: 0 -2px 3px 3px hsla(black, 0.5);
+    background: hsl(225, 50%, 50%);
     background: -moz-linear-gradient(top,
-        hsl(225, 50%, 45%),
-        hsl(225, 50%, 40%)
+        hsl(225, 50%, 55%),
+        hsl(225, 50%, 50%)
     );
-    box-shadow: 0 1px 3px hsla(black, 0.5);
 
     > ul.menubar {
+        li {
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            vertical-align: middle;
+        }
         a {
+            position: relative;
+            display: block;
+            z-index: 1;  // above the icon
+            padding: 0.33em 0.33em 0.33em 1em;
             text-decoration: none;
             color: inherit;
         }
-        li {
-            display: inline-block;
-            padding: 0.33em;
+        img {
+            position: absolute;
+            top: 28px;
+            opacity: 0;
+            pointer-events: none;
+
+            @include transition($hover-time linear opacity, $hover-time linear top);
+        }
+        li:hover img {
+            top: 3px;
+            opacity: 0.5;
         }
     }
 }
@@ -182,8 +221,6 @@ body {
 }
 
 #breadcrumbs {
-    background: white;
-    background: -moz-linear-gradient(top, white, #ececec);
     background: hsl(36, 20%, 95%);
     border-bottom: 1px solid #ddd;
     padding: 0.33em 2em;

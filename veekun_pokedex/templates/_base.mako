@@ -12,17 +12,21 @@
 </head>
 <body>
     <header id="header">
-        <div id="logo">
-            veekun
-        </div>
         <nav id="nav">
+            <div id="logo">
+                veekun
+            </div>
+            <form id="lookup">
+                ## XXX random example placeholder every time
+                <input type="search">
+                <button type="submit">→</button>
+            </form>
             <ul class="menubar">
-                <li><a href="abc">veekun</a></li>
-                <li><a href="abc">Pokémon</a></li>
-                <li><a href="abc">Moves</a></li>
-                <li><a href="abc">Abilities</a></li>
-                <li><a href="abc">Types</a></li>
-                <li><a href="abc">Places</a></li>
+                <li><img src="http://veekun.com/dex/media/items/poke-doll.png"><a href="abc">Pokémon</a></li>
+                <li><img src="http://veekun.com/dex/media/items/tm-normal.png"><a href="abc">Moves</a></li>
+                <li><img src="http://veekun.com/dex/media/items/explorer-kit.png"><a href="abc">Abilities</a></li>
+                <li><img src="http://veekun.com/dex/media/items/pokeblock-case.png"><a href="abc">Types</a></li>
+                <li><img src="http://veekun.com/dex/media/items/old-sea-map.png"><a href="abc">Places</a></li>
                 <li><a href="abc">Tools</a></li>
             </ul>
         </nav>
