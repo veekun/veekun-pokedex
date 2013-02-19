@@ -1,6 +1,6 @@
 <%inherit file="/_base.mako"/>
 <%namespace name="lib" file="/_lib.mako"/>
-<% from veekun_pokedex.lib import formatting %>
+<%namespace name="libfmt" module="veekun_pokedex.lib.formatting"/>
 
 ## TODO: everywhere there's a species.name needs fixing for forms
 
@@ -61,33 +61,6 @@
             </dl>
         </section>
 
-        <div class="col6">
-            <section>
-                <h2>${_(u"Abilities")}</h2>
-                <dl class="horizontal">
-                    % for pokemon_ability in pokemon.pokemon_abilities:
-                    <dt>
-                        % if pokemon_ability.is_hidden:
-                        ${_(u"Hidden ability")}
-                        % else:
-                        ${_(u"Ability {n}").format(n=pokemon_ability.slot)}
-                        % endif
-                    </dt>
-                    <dd>
-                        <a href="${request.resource_url(pokemon_ability.ability)}">${pokemon_ability.ability.name}</a> —
-                        ${lib.render_markdown(pokemon_ability.ability, 'short_effect')}
-                    </dd>
-                    % endfor
-                </dl>
-            </section>
-        </div>
-
-        <div class="col2">
-            <img src="http://veekun.com/dex/media/pokemon/sugimori/${species.id}.png" style="max-width: 100%; max-height: 16em;">
-        </div>
-    </div>
-
-    <div class="columns">
         <section class="col6">
             <h2>${_(u'Type')}</h2>
             XXX more stuff here?  like what?  seems barren.
@@ -122,6 +95,32 @@
                 % endif
             </dl>
         </section>
+
+        <div class="col2">
+            <img src="http://veekun.com/dex/media/pokemon/sugimori/${species.id}.png" style="max-width: 100%; max-height: 16em;">
+        </div>
+    </div>
+
+    <div class="columns">
+        <section class="col6">
+            <h2>${_(u"Abilities")}</h2>
+            <dl class="horizontal">
+                % for pokemon_ability in pokemon.pokemon_abilities:
+                <dt>
+                    % if pokemon_ability.is_hidden:
+                    ${_(u"Hidden ability")}
+                    % else:
+                    ${_(u"Ability {n}").format(n=pokemon_ability.slot)}
+                    % endif
+                </dt>
+                <dd>
+                    <a href="${request.resource_url(pokemon_ability.ability)}">${pokemon_ability.ability.name}</a> —
+                    ${libfmt.render_markdown(pokemon_ability.ability, 'short_effect', inline=True)}
+                </dd>
+                % endfor
+            </dl>
+        </section>
+
         <section class="col6">
             <h2>${_(u"Stats")}</h2>
             <%def name="stats_cell(percentile)">
@@ -313,7 +312,7 @@
         </div>
     </header>
 
-    <table class="standard-table pokemon-evolution-chart">
+    <table class="standard-table linear-pokemon-chart pokemon-evolution-chart">
         <thead>
             <tr>
                 <th>${_(u'Baby')}</th>
@@ -552,7 +551,7 @@
                     ⬇${row.key.priority}
                     % endif
                 </td>
-                <td>${lib.render_markdown(row.key, 'short_effect')}</td>
+                <td>${libfmt.render_markdown(row.key, 'short_effect')}</td>
             </tr>
             % endfor
         </tbody>

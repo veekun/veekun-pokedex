@@ -1,5 +1,6 @@
 <%inherit file="/_base.mako"/>
 <%namespace name="lib" file="/_lib.mako"/>
+<%namespace name="libfmt" module="veekun_pokedex.lib.formatting"/>
 
 <%block name="title">${move.name} [Move] - veekun</%block>
 
@@ -51,7 +52,7 @@
             <section>
                 <h2>${_(u'Effect summary')}</h2>
                 ## TODO markdown
-                ${lib.render_markdown(move.move_effect, 'short_effect')}
+                ${libfmt.render_markdown(move.move_effect, 'short_effect')}
             </section>
         </div>
     </div>
@@ -162,7 +163,7 @@
     <div class="columns">
         <section class="col8">
             ## TODO doesn't exist in ja
-            ${lib.render_markdown(move, 'effect')}
+            ${libfmt.render_markdown(move, 'effect')}
         </section>
 
         <section class="col4">
@@ -180,7 +181,7 @@
                 <li>
                     <a href="{url(controller='dex_search', action='move_search', category=meta.category.identifier)}">
                         ## XXX okay, well, this isn't really markdown, but...
-                        ${lib.render_markdown(meta.category, 'description')}</a>
+                        ${libfmt.render_markdown(meta.category, 'description')}</a>
                 </li>
                 % if meta.meta_ailment_id:
                 <li>
@@ -320,7 +321,7 @@
             <dd>${contest_hearts(u'♥', move.contest_effect.jam)}</dd>
             <dt>${_(u"Flavor text")}</dt>
             ## XXX again, not markdown, but...
-            <dd>${lib.render_markdown(move.contest_effect, 'flavor_text')}</dd>
+            <dd>${libfmt.render_markdown(move.contest_effect, 'flavor_text')}</dd>
 
             <dt>${_(u"Use after")}</dt>
             <dd>${contest_moves(move.contest_combo_prev)}</dd>
@@ -343,7 +344,7 @@
             <dd>${contest_hearts(u'♡', move.super_contest_effect.appeal)}</dd>
             <dt>${_("Flavor text")}</dt>
             ## XXX again, not markdown, but...
-            <dd>${lib.render_markdown(move.super_contest_effect, 'flavor_text')}</dd>
+            <dd>${libfmt.render_markdown(move.super_contest_effect, 'flavor_text')}</dd>
 
             <dt>${_("Use after")}</dt>
             <dd>${contest_moves(move.super_contest_combo_prev)}</dd>

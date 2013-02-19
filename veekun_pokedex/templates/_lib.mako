@@ -139,29 +139,6 @@
 ################################################################################
 ## Misc UI-y stuff
 
-## Renders a block of Markdown from the database.
-## Call me with a row and column name SEPARATELY, so I can handle language
-## fallback for you if we don't have this particular text translated yet.
-<%def name="render_markdown(row, relation)">
-## XXX with the way this is set up, pokedex lib will do the markdowning for us,
-## which makes it hard for the linkifier to find the request.
-<% local = getattr(row, relation, None) %>
-% if local:
-    ${local}
-% else:
-    <p class="missing-translation">
-        ${_(u"Sorry, we haven't translated this into your language yet!  "
-            u"Here's the original English.  (If you can help translate, let us know!)")}
-    </p>
-    <%
-        # XXX uhm how do i get the default language
-        from veekun_pokedex.model import session
-        import pokedex.db.tables as t
-        english = session.query(t.Language).get(9)
-    %>
-    ${getattr(row, relation + '_map')[english]}
-% endif
-</%def>
 
 <%def name="evolution_description(evolution)"><%
 
