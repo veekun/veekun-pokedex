@@ -58,6 +58,306 @@
 }
 
 
+////// PANELS
+ul.pokemon-panels li {
+    display: inline-block;
+    position: relative;
+    margin: 1em;
+    vertical-align: top;
+
+    min-width: 24em;
+    max-width: 32em;
+    width: 30%;
+
+    min-height: 100px;  // sprite height + border
+
+    text-align: left;
+
+    p {
+        margin: 0.5em 0.5em;
+        line-height: 1.2;
+    }
+
+    .-sprite {
+        display: block;
+        position: absolute;
+        overflow: hidden;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        // size of B/W sprites
+        height: 96px;
+        width: 96px;
+        line-height: 96px;
+        border-radius: 48px;
+
+        // overridden below
+        background: #ececec;
+        border: 2px solid #c0c0c0;
+
+        > img {
+            display: block;
+            -moz-transform: scaleX(-1);
+        }
+    }
+
+    .-header {
+        font-size: 1.4em;
+        line-height: 1.6;
+
+        // extend the bar left half a sprite-bubble width
+        margin-left: 50px;
+        padding-left: 50px;
+    }
+    .-subheader {
+        line-height: 1.6;
+        padding-left: 0.33em;
+
+        // extend the bar left half a sprite-bubble width
+        margin-left: 50px;
+        padding-left: 56px;  // plus a bit for some indent
+    }
+    .-body {
+        margin-left: 100px;  // width of sprite + border
+    }
+
+    .-types {
+        position: absolute;
+        top: 0;
+        right: 0.3em;  // matches line-height above
+        left: auto;
+        bottom: auto;
+
+        > img {
+            vertical-align: baseline;
+        }
+    }
+
+    .-number {
+        position: absolute;
+        font-size: 0.8em;
+        margin: 0;
+        width: 3em;
+        top: 0;
+        left: 0;
+
+        line-height: 1.5;
+        font-family: monospace;
+        text-align: center;
+        color: #a0a0c0;;
+
+        -moz-transform: rotate(-45deg);
+        -moz-transform-origin: center bottom;
+    }
+
+    .-evostage {
+        //position: absolute;
+        //top: 2em;
+        //right: 0;
+        //margin: 0.5em;
+        display: none;  // XXX
+    }
+
+    .-stats {
+        var {
+            font-family: inherit;
+            font-style: inherit;
+            color: #909090;
+        }
+    }
+    .-statgrp {
+        display: inline-block;
+        width: 49%;
+    }
+
+
+    @mixin panel-colors($hue, $saturation: 50%) {
+        .-sprite {
+            background-color: hsl($hue, $saturation, 93%);
+            border-color: hsl($hue, $saturation, 85%);
+        }
+        .-header {
+            background-color: hsl($hue, $saturation, 85%);
+
+            a {
+                color: hsl($hue, $saturation, 40%);
+                &:hover {
+                    color: hsl($hue, $saturation, 20%);
+                }
+            }
+        }
+        .-subheader {
+            background-color: hsl($hue, $saturation, 93%);
+            color: hsl($hue, $saturation * 0.8, 40%);
+        }
+    }
+    &.panel-grass {
+        @include panel-colors(120);
+    }
+    &.panel-fire {
+        @include panel-colors(20);
+    }
+    &.panel-ground {
+        @include panel-colors(30, 40%);
+    }
+    &.panel-poison {
+        @include panel-colors(290);
+    }
+    &.panel-electric {
+        @include panel-colors(45);
+    }
+    &.panel-water {
+        @include panel-colors(230);
+    }
+    &.panel-rock {
+        @include panel-colors(15, 20%);
+    }
+    &.panel-flying {
+        @include panel-colors(255);
+    }
+    &.panel-ice {
+        @include panel-colors(180);
+    }
+    &.panel-normal {
+        @include panel-colors(45, 20%);
+    }
+    &.panel-bug {
+        @include panel-colors(75);
+    }
+    &.panel-ghost {
+        @include panel-colors(285, 30%);
+    }
+    &.panel-fighting {
+        @include panel-colors(0);
+    }
+    &.panel-dragon {
+        @include panel-colors(270);
+    }
+    &.panel-psychic {
+        @include panel-colors(300);
+    }
+    &.panel-dark {
+        @include panel-colors(0, 30%);
+    }
+    &.panel-steel {
+        @include panel-colors(225, 20%);
+    }
+}
+dl.panel-stats {
+    position: relative;
+    padding: 0.33em 0;
+    text-align: center;
+
+    dt {
+        float: none;
+        margin: 0;
+
+        position: absolute;
+        margin-top: -2em;
+        display: none;
+        left: 50%;
+        padding: 0.33em;
+        border: 1px solid hsl(30, 40%, 70%);
+        background: hsl(30, 40%, 90%);
+    }
+    dd {
+        margin: 0;
+        clear: none;
+
+        width: 15%;
+        display: inline-block;
+    }
+}
+
+
+
+////// BROWSE STUFF -- TODO maybe put elsewhere
+.browse-pill {
+    display: inline-block;
+    margin: 0 0.25em 0.25em;
+    border-radius: 1px;
+    line-height: 1;
+
+
+    border: 1px solid transparent;
+
+    color: inherit;
+
+    label& {
+        input {
+            margin: 0 0.25em;
+            vertical-align: middle;
+        }
+        // XXX this is dumb
+        > span {
+            display: inline-block;
+            padding: 0 0.5em;
+            line-height: 1.5;
+            vertical-align: middle;
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        background: hsl(225, 60%, 95%);
+        border-color: hsl(225, 60%, 90%);
+    }
+
+    &.selected {
+        background: hsl(215, 30%, 83%);
+        border-color: hsl(215, 30%, 83%);
+
+        > span {
+            background: hsl(225, 60%, 93%);
+        }
+
+
+
+        background: hsl(225, 60%, 90%);
+        border-color: hsl(225, 60%, 90%);
+
+        > span {
+            background: hsl(225, 60%, 95%);
+        }
+    }
+}
+.browse-pill.browse-pill-radio {
+    border-radius: 1em;
+
+    > span {
+        border-radius: 0 1em 1em 0;
+    }
+}
+
+
+
+xxx.browse-filter-criterion {
+    padding: 1em;
+    margin: 1em 0;
+    border-top: 2px solid hsl(30, 20%, 83%);
+    border-left: 1px solid hsl(30, 20%, 83%);
+
+    > h3 {
+        font-size: 1.33em;
+        padding: 0 0.25em;
+        margin: -0.75em -0.75em 0.75em;
+        background: hsl(30, 20%, 95%);
+        color: hsl(30, 20%, 62%);
+    }
+}
+.browse-filter-criterion {
+    margin: 0.5em 0;
+    padding: 0.5em;
+
+    background: hsl(0%, 0%, 93%);
+    border: 1px solid hsl(0%, 0%, 90%);
+}
+.browse-filter-options > li {
+    display: inline-block;
+}
+
+
 ////// TABLES
 table.table-pretty {
     // TODO this doesn't do nested tables very well, but >tbody breaks thead
@@ -111,7 +411,46 @@ table.table-pretty.table-striped-bodies {
 }
 
 col.-version {
-    width: 2em;
+    width: 4em;
+}
+
+
+////// DETAILS
+details {
+    margin: 0.5em 0;
+    border: 1px solid #ececec;
+
+    > summary {
+        position: relative;
+        display: block;
+        font-size: 2em;
+        padding: 0.4em;
+        background: #f4f4f4;
+
+        // TODO put elsewhere
+        ul.browse-examples {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+
+            li {
+                display: inline-block;
+                vertical-align: bottom;
+                opacity: 0.2;
+
+                &:first-child {
+                    opacity: 0.6;
+                }
+                &:nth-child(2) {
+                    opacity: 0.4;
+                }
+            }
+
+            .eyeball-crop {
+                display: block;
+            }
+        }
+    }
 }
 
 

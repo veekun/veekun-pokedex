@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='pokemon')}">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='index')}">
     <link rel="stylesheet" type="text/css" href="${request.route_url('pyscss', css_path='mobile')}">
+    <script src="http://code.jquery.com/jquery-1.9.0.js"></script>
     <title><%block name="title">veekun</%block></title>
 </head>
 <body>

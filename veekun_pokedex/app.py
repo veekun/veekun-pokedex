@@ -55,4 +55,10 @@ def main(global_config, **settings):
     config.add_route('pyscss', '/css/{css_path:[^/]+}.css')
     config.add_view(route_name='pyscss', view='pyramid_scss.controller.get_scss', renderer='scss', request_method='GET')
 
+    # Fucking around
+    config.add_route('api-test', '/pokemon/eevee.json')
+    config.add_route('api-search-test', '/api/pokemon/search')
+    config.add_route('pokemon-search', '/pokemon')
+    config.add_route('move-search', '/en/moves')
+
     return config.make_wsgi_app()

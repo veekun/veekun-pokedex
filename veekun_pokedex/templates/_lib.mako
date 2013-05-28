@@ -47,6 +47,11 @@
 <span class="version-${version.identifier}">${version_initials(version.identifier)}</span>\
 </%def>
 
+<%def name="version_name(version)">\
+## TODO broken in other languages
+<span class="version-${version.identifier}">${version.name}</span>\
+</%def>
+
 <%def name="generation_icon(generation)">${generation_icon_by_id(generation.id)}</%def>
 
 ## Use me to get a generation icon without a real Generation object
