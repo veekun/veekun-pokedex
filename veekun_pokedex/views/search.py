@@ -5,6 +5,7 @@ from pyramid.view import view_config
 import pokedex.db.tables as t
 import veekun_pokedex.api as api
 from veekun_pokedex.model import session
+from veekun_pokedex.resource import PokemonIndex
 
 
 @view_config(
@@ -40,6 +41,32 @@ def pokemon_search(context, request):
         all_generations=session.query(t.Generation),
     )
 
+
+@view_config(
+    context=PokemonIndex,
+    renderer='/search/pokemon-landing-test.mako')
+def pokemon_search_landing_test(context, request):
+    did_search = bool(request.GET)
+
+    if did_search:
+        all_pokemon = (
+            session.query(t.Pokemon)
+            .filter(t.Pokemon.is_default)
+            .order_by(t.Pokemon.species_id.asc())
+            .options(joinedload(t.Pokemon.species))
+            .all()
+        )
+
+        return dict(
+            did_search=did_search,
+            all_pokemon=all_pokemon,
+        )
+
+    else:
+        return dict(
+            did_search=did_search,
+            all_pokemon=None,
+        )
 
 @view_config(
     route_name='move-search',

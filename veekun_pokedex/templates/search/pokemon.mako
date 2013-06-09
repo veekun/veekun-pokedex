@@ -300,7 +300,7 @@
     ## allow choosing some at random ...
 
   % for group in pokemon_groups:
-    <details>
+    <details class="xxx-search-groups">
         <summary>
             <a href="XXX"><!-- ▾ --> ▸ ${group.identifier}</a> ×${len(pokemons[group])}
             <ul class="browse-examples">

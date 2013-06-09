@@ -169,79 +169,6 @@ ul.pokemon-panels li {
         display: inline-block;
         width: 49%;
     }
-
-
-    @mixin panel-colors($hue, $saturation: 50%) {
-        .-sprite {
-            background-color: hsl($hue, $saturation, 93%);
-            border-color: hsl($hue, $saturation, 85%);
-        }
-        .-header {
-            background-color: hsl($hue, $saturation, 85%);
-
-            a {
-                color: hsl($hue, $saturation, 40%);
-                &:hover {
-                    color: hsl($hue, $saturation, 20%);
-                }
-            }
-        }
-        .-subheader {
-            background-color: hsl($hue, $saturation, 93%);
-            color: hsl($hue, $saturation * 0.8, 40%);
-        }
-    }
-    &.panel-grass {
-        @include panel-colors(120);
-    }
-    &.panel-fire {
-        @include panel-colors(20);
-    }
-    &.panel-ground {
-        @include panel-colors(30, 40%);
-    }
-    &.panel-poison {
-        @include panel-colors(290);
-    }
-    &.panel-electric {
-        @include panel-colors(45);
-    }
-    &.panel-water {
-        @include panel-colors(230);
-    }
-    &.panel-rock {
-        @include panel-colors(15, 20%);
-    }
-    &.panel-flying {
-        @include panel-colors(255);
-    }
-    &.panel-ice {
-        @include panel-colors(180);
-    }
-    &.panel-normal {
-        @include panel-colors(45, 20%);
-    }
-    &.panel-bug {
-        @include panel-colors(75);
-    }
-    &.panel-ghost {
-        @include panel-colors(285, 30%);
-    }
-    &.panel-fighting {
-        @include panel-colors(0);
-    }
-    &.panel-dragon {
-        @include panel-colors(270);
-    }
-    &.panel-psychic {
-        @include panel-colors(300);
-    }
-    &.panel-dark {
-        @include panel-colors(0, 30%);
-    }
-    &.panel-steel {
-        @include panel-colors(225, 20%);
-    }
 }
 dl.panel-stats {
     position: relative;
@@ -269,7 +196,154 @@ dl.panel-stats {
     }
 }
 
+ul.pokemon-mini-panels li {
+    display: inline-block;
 
+    a {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        height: 4em;
+        width: 10em;
+        padding-bottom: 1.66em;  /* enough space for the name */
+        margin: 0.33em;
+
+        border: 2px solid rgb(224, 220, 209);
+        background: rgb(240, 238, 233);
+
+        box-shadow: 1px 1px 0px rgba(black, 0.33);
+
+        color: #404040;
+        text-decoration: none;
+    }
+    img.-sprite {
+        display: block;
+        position: absolute;
+        z-index: 1;
+        opacity: 0.7;
+        top: -16px;
+        right: -16px;
+
+        @include transition(opacity 0.2s linear);
+    }
+    &:hover img.-sprite {
+        opacity: 1;
+    }
+    .-name {
+        display: block;
+        position: absolute;
+        z-index: 2;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.33em 0.5em;
+        background: rgb(224, 220, 209);
+
+        @include transition(color 0.2s linear);
+    }
+    &:hover .-name {
+        color: rgb(61, 56, 40);
+        text-decoration: underline;
+    }
+    .-info {
+        font-size: 0.75em;
+        padding: 0.5em;
+        line-height: 1.2;
+    }
+}
+
+@mixin panel-colors($hue, $saturation: 50%) {
+    $pale: hsl($hue, $saturation, 93%);
+    $medium: hsl($hue, $saturation, 85%);
+    $text: hsl($hue, $saturation, 40%);
+    $dark-text: hsl($hue, $saturation, 20%);
+
+    .pokemon-panels & {
+        .-sprite {
+            background-color: $pale;
+            border-color: $medium;
+        }
+        .-header {
+            background-color: $medium;
+
+            a {
+                color: $text;
+                &:hover {
+                    color: $dark-text;
+                }
+            }
+        }
+        .-subheader {
+            background-color: $pale;
+            color: hsl($hue, $saturation * 0.8, 40%);
+        }
+    }
+
+    .pokemon-mini-panels & {
+        a {
+            color: $text;
+            border-color: $medium;
+            background-color: $pale;
+        }
+        .-name {
+            background-color: $medium;
+        }
+        :hover .-name {
+            color: $dark-text;
+        }
+    }
+}
+.panel-grass {
+    @include panel-colors(120);
+}
+.panel-fire {
+    @include panel-colors(20);
+}
+.panel-ground {
+    @include panel-colors(30, 40%);
+}
+.panel-poison {
+    @include panel-colors(290);
+}
+.panel-electric {
+    @include panel-colors(45);
+}
+.panel-water {
+    @include panel-colors(230);
+}
+.panel-rock {
+    @include panel-colors(15, 20%);
+}
+.panel-flying {
+    @include panel-colors(255);
+}
+.panel-ice {
+    @include panel-colors(180);
+}
+.panel-normal {
+    @include panel-colors(45, 20%);
+}
+.panel-bug {
+    @include panel-colors(75);
+}
+.panel-ghost {
+    @include panel-colors(285, 30%);
+}
+.panel-fighting {
+    @include panel-colors(0);
+}
+.panel-dragon {
+    @include panel-colors(270);
+}
+.panel-psychic {
+    @include panel-colors(300);
+}
+.panel-dark {
+    @include panel-colors(0, 30%);
+}
+.panel-steel {
+    @include panel-colors(225, 20%);
+}
 
 ////// BROWSE STUFF -- TODO maybe put elsewhere
 .browse-pill {
@@ -416,7 +490,7 @@ col.-version {
 
 
 ////// DETAILS
-details {
+details.xxx-search-groups {
     margin: 0.5em 0;
     border: 1px solid #ececec;
 

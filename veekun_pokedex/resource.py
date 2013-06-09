@@ -136,6 +136,18 @@ class PokedexURLGenerator(object):
 
     def __init__(self, resource, request):
         resource_chain = [resource]
+        locale = request._LOCALE_
+
+        if isinstance(resource, PokedexIndex) or issubclass(resource, PokedexIndex):
+            # TODO needs to reuse below stuff, but for now this is all that
+            # works
+            prefix = 'pokemon'
+            self.virtual_path = u"/".join(
+                [u'', locale, LANGUAGES[locale][prefix]]
+            )
+            self.physical_path = self.virtual_path
+            return
+
 
         # TODO make this use adapters or whatever
         if isinstance(resource, t.Pokemon):
@@ -159,7 +171,7 @@ class PokedexURLGenerator(object):
             raise TypeError(repr(resource))
 
         self.virtual_path = u"/".join(
-            [u'', request._LOCALE_, prefix] +
+            [u'', locale, LANGUAGES[locale][prefix]] +
             [res.name.lower() for res in resource_chain]
         )
         self.physical_path = self.virtual_path
