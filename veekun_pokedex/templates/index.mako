@@ -17,7 +17,7 @@
 <section>
     <h1>Pages</h1>
 
-    <ul class="home-tiles">
+    <ul class="large-tiles">
         <li><a href="/pokemon"><img src="http://veekun.com/dex/media/items/poke-doll.png"> Pokémon</a></li>
         <li><a href="/moves"><img src="http://veekun.com/dex/media/items/tm-normal.png"> Moves</a></li>
         <li><a href="/types"><img src="http://veekun.com/dex/media/items/pokeblock-case.png"> Types</a></li>
@@ -31,7 +31,7 @@
 <section>
     <h1>Tools</h1>
 
-    <ul class="home-tiles home-tiles-wider">
+    <ul class="large-tiles large-tiles-wider">
         <li><a href="/tools/compare"><img src="http://veekun.com/dex/media/items/silph-scope.png"> Compare Pokémon</a></li>
         <li><a href="/tools/pokeballs"><img src="http://veekun.com/dex/media/items/master-ball.png"> Pokéball performance</a></li>
         <li><a href="/tools/stats"><img src="http://veekun.com/dex/media/items/scanner.png"> Stat calculator</a></li>
@@ -42,7 +42,7 @@
 <section>
     <h1>More</h1>
 
-    <ul class="home-tiles home-tiles-wider">
+    <ul class="large-tiles large-tiles-wider">
         <li><a href="http://github.com/veekun"><img src="http://veekun.com/dex/media/items/dubious-disc.png"> Source code</a></li>
         <li><a href="http://me.veekun.com/"><img src="http://veekun.com/dex/media/items/journal.png"> fuzzy notepad</a></li>
     </ul>

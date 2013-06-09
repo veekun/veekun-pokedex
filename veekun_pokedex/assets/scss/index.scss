@@ -23,18 +23,25 @@
     font-size: 2em;
 }
 
-.home-tiles {
-    font-size: 3em;
+.large-tiles {
+    font-size: 2em;
     text-align: center;
+    word-spacing: -1em;  // remove space between <li>s
 
     li {
         display: inline-block;
-        width: 32%;
-        margin: 0.13em 0;
+        width: 33.33%;
+
+        word-spacing: normal;  // restore spacing
+
+        &.-fullwidth {
+            width: 100%;
+        }
     }
     a {
         display: block;
         padding: 0.33em;
+        margin: 0.13em;
         background: #f4f4f4;
         border-radius: 4px;
         border: 1px solid #ececec;
@@ -44,18 +51,18 @@
         text-shadow: 1px 1px 1px #e0e0e0;
 
         &:hover {
-            background: hsl(225, 30%, 93%);
-            border-color: hsl(225, 30%, 87%);
+            background: hsl(225, 40%, 93%);
+            border-color: hsl(225, 40%, 87%);
         }
     }
     img {
         @include pixel-scaling();
         height: 48px;
         width: 48px;
-        vertical-align: text-bottom;
+        vertical-align: -33%;
     }
 }
 
-.home-tiles-wider li {
-    width: 49%;
+.large-tiles.large-tiles-wider li {
+    width: 50%;
 }
