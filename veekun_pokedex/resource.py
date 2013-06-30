@@ -138,7 +138,7 @@ class PokedexURLGenerator(object):
         resource_chain = [resource]
         locale = request._LOCALE_
 
-        if isinstance(resource, PokedexIndex) or issubclass(resource, PokedexIndex):
+        if isinstance(resource, PokedexIndex):
             # TODO needs to reuse below stuff, but for now this is all that
             # works
             prefix = 'pokemon'
