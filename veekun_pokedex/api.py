@@ -214,16 +214,8 @@ class Query(object):
         # specific multidict implementations?
         criteria = criteria.dict_of_lists()
 
-        for key, values in criteria.items():
-            # TODO this will explode royally (should it?) if there is any extra
-            # stuff
-            self.add_criterion(key, *values)
-
-        ## FILTERING
-
-        # ... TODO move that down here, or something.  iterate the locus's
-        # fields instead of the multidict?
-
+        # TODO anything else need doing with this?  what if it's falsey?
+        criteria.pop('all', None)
 
         ## GROUPING
 
@@ -231,14 +223,28 @@ class Query(object):
         # url ui thing
         if 'browse' in criteria:
             # XXX this isn't really right at all.
-            self.grouper = criteria['browse']
+            # XXX what if there's more than one.  or fewer than one.
+            self.grouper, = criteria.pop('browse')
         else:
             self.grouper = 'generation'
+
+        ## FILTERING
+
+        # ... TODO move that down here, or something.  iterate the locus's
+        # fields instead of the multidict?
+
 
         ## SORTING
 
 
         ## XXX WHAT ELSE.  PRELOADING?
+
+        ## CRITERIA
+        for key, values in criteria.items():
+            # TODO this will explode royally (should it?) if there is any extra
+            # stuff
+            self.add_criterion(key, *values)
+
 
     def _get_field(self, field):
         if isinstance(field, basestring):
@@ -277,7 +283,7 @@ class Query(object):
         pass
 
 
-    def results(self):
+    def execute(self):
         """Returns results.  Oh dear."""
         # TODO probably want a results object i guess
 
@@ -300,6 +306,8 @@ class Query(object):
         print q
         print
         print
+
+        return Results(self.locus_cls, q.all(), self.grouper)
 
         groups = []
         grouped_rows = dict()
@@ -334,17 +342,63 @@ class Query(object):
 
         return groups, grouped_rows, previews
 
-    def execute(self):
-        rows = self.query.all()
-
-        return Results(self.locus_cls, rows)
-
 
 class Results(object):
-    def __init__(self, locus_cls, rows):
+    # TODO should support multiple output formats for methods, i think, via a
+    # lens or formatter or something.  e.g. locus objects, plain structures for
+    # json
+    def __init__(self, locus_cls, rows, grouper):
         self.locus_cls = locus_cls
-        self.orm_rows = rows
+        self.rows = rows
+        # TODO maybe just the query object
+        self.grouper = grouper
+        self.grouped = bool(grouper)
+
+        # TODO wait should i, like, actually instantiate PokemonLocus objects,
+        # or are they classes pretending to be objects, or what is happening
+
+        self.grouped_rows = self._post_init_group_rows(rows, grouper)
+
+    def _post_init_group_rows(self, rows, grouper):
+        grouped_rows = {}
+
+        for row in rows:
+            # XXX ugh this should be part of the locus definition
+            if grouper == 'generation':
+                tmp = self.locus_cls(row)
+                keys = [tmp.generation]
+            elif grouper == 'type':
+                keys = row.types
+            else:
+                # XXX
+                keys = []
+
+            for key in keys:
+                grouped_rows.setdefault(key, []).append(row)
+
+        return grouped_rows
+
+    def __len__(self):
+        return len(self.rows)
 
     def __iter__(self):
-        for row in self.orm_rows:
-            yield self.locus_cls(row)
+        return iter(self.rows)
+
+    @property
+    def groups(self):
+        return sorted(self.grouped_rows.keys())
+
+    def rows_in_group(self, group):
+        return self.grouped_rows[group]
+
+    def previews_for_group(self, group, limit=3):
+        seen = 0
+        for row in self.grouped_rows[group]:
+            if self.locus_cls is PokemonLocus and row.species.evolves_from_species_id:
+                continue
+
+            yield row
+
+            seen += 1
+            if seen >= limit:
+                break

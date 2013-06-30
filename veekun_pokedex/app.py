@@ -58,7 +58,6 @@ def main(global_config, **settings):
     # Fucking around
     config.add_route('api-test', '/pokemon/eevee.json')
     config.add_route('api-search-test', '/api/pokemon/search')
-    config.add_route('pokemon-search', '/pokemon')
     config.add_route('move-search', '/en/moves')
 
     return config.make_wsgi_app()
