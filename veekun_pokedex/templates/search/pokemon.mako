@@ -198,7 +198,7 @@ ${search_form()}
 <ul class="pokemon-mini-panels">
     % for pokemon in pokemons:
     <li class="panel-${pokemon.types[0].identifier}">
-        <a href="...">
+        <a href="${request.resource_url(pokemon)}">
             <div class="-name">${pokemon.species.name}</div>
             ####% if not pokemon.is_default:
             ##% if pokemon.default_form.form_name:

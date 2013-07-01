@@ -1,3 +1,10 @@
+<%!
+    from veekun_pokedex.resource import PokemonIndex
+    from veekun_pokedex.resource import MoveIndex
+    from veekun_pokedex.resource import AbilityIndex
+    from veekun_pokedex.resource import TypeIndex
+    from veekun_pokedex.resource import PlaceIndex
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,12 +30,12 @@
                 <button type="submit">→</button>
             </form>
             <ul class="menubar">
-                <li><img src="http://veekun.com/dex/media/items/poke-doll.png"><a href="abc">Pokémon</a></li>
-                <li><img src="http://veekun.com/dex/media/items/tm-normal.png"><a href="abc">Moves</a></li>
-                <li><img src="http://veekun.com/dex/media/items/explorer-kit.png"><a href="abc">Abilities</a></li>
-                <li><img src="http://veekun.com/dex/media/items/pokeblock-case.png"><a href="abc">Types</a></li>
-                <li><img src="http://veekun.com/dex/media/items/old-sea-map.png"><a href="abc">Places</a></li>
-                <li><a href="abc">Tools</a></li>
+                <li><img src="http://veekun.com/dex/media/items/poke-doll.png"><a href="${request.resource_url(PokemonIndex)}">Pokémon</a></li>
+                <li><img src="http://veekun.com/dex/media/items/tm-normal.png"><a href="${request.resource_url(MoveIndex)}">Moves</a></li>
+                <li><img src="http://veekun.com/dex/media/items/explorer-kit.png"><a href="${request.resource_url(AbilityIndex)}">Abilities</a></li>
+                <li><img src="http://veekun.com/dex/media/items/pokeblock-case.png"><a href="${request.resource_url(TypeIndex)}">Types</a></li>
+                <li><img src="http://veekun.com/dex/media/items/old-sea-map.png"><a href="${request.resource_url(PlaceIndex)}">Places</a></li>
+                <li><a href="XXX">Tools</a></li>
             </ul>
         </nav>
     </header>

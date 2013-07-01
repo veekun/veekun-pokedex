@@ -1,6 +1,7 @@
 # encoding: utf8
 """Defines the resource traversal tree for the site.
 """
+from pyramid.i18n import get_locale_name
 from pyramid.interfaces import IResourceURL
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql.expression import func
@@ -135,43 +136,44 @@ class PokedexURLGenerator(object):
     implements(IResourceURL)
 
     def __init__(self, resource, request):
-        resource_chain = [resource]
-        locale = request._LOCALE_
+        locale = get_locale_name(request)
 
-        if isinstance(resource, PokedexIndex):
-            # TODO needs to reuse below stuff, but for now this is all that
-            # works
-            prefix = 'pokemon'
-            self.virtual_path = u"/".join(
-                [u'', locale, LANGUAGES[locale][prefix]]
-            )
-            self.physical_path = self.virtual_path
-            return
+        if isinstance(resource, PokedexIndex) or (
+                isinstance(resource, type) and issubclass(resource, PokedexIndex)):
 
+            resource_type = resource.table
+            resource_chain = []
+        else:
+            resource_type = type(resource)
+            resource_chain = [resource]
 
         # TODO make this use adapters or whatever
-        if isinstance(resource, t.Pokemon):
+        if issubclass(resource_type, t.Pokemon):
             prefix = 'pokemon'
-        elif isinstance(resource, t.PokemonSpecies):
+        elif issubclass(resource_type, t.PokemonSpecies):
             prefix = 'pokemon'
-        elif isinstance(resource, t.Move):
+        elif issubclass(resource_type, t.Move):
             prefix = 'moves'
-        elif isinstance(resource, t.Type):
+        elif issubclass(resource_type, t.Type):
             prefix = 'types'
-        elif isinstance(resource, t.Item):
+        elif issubclass(resource_type, t.Item):
             prefix = 'items'
-        elif isinstance(resource, t.Region):
+        elif issubclass(resource_type, t.Region):
             prefix = 'places'
-        elif isinstance(resource, t.Location):
+        elif issubclass(resource_type, t.Location):
             prefix = 'places'
-            resource_chain.insert(0, resource.region)
-        elif isinstance(resource, t.Ability):
+
+            if resource_chain:
+                resource_chain.insert(0, resource.region)
+        elif issubclass(resource_type, t.Ability):
             prefix = 'abilities'
+        elif issubclass(resource_type, t.Nature):
+            prefix = 'natures'
         else:
             raise TypeError(repr(resource))
 
-        self.virtual_path = u"/".join(
-            [u'', locale, LANGUAGES[locale][prefix]] +
-            [res.name.lower() for res in resource_chain]
-        )
+        path_parts = [u'', locale, LANGUAGES[locale][prefix]]
+        path_parts.extend(res.name.lower() for res in resource_chain)
+
+        self.virtual_path = u'/'.join(path_parts)
         self.physical_path = self.virtual_path
