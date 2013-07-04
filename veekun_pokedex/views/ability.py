@@ -10,7 +10,8 @@ from veekun_pokedex.resource import AbilityIndex
     context=AbilityIndex,
     renderer='/browse/abilities.mako')
 def ability_browse(context, request):
-    abilities = session.query(t.Ability)
+    abilities = (session.query(t.Ability)
+        .filter_by(is_main_series=True))
 
     template_ns = dict(
         abilities=abilities,
