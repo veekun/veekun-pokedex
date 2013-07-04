@@ -169,12 +169,12 @@
 
         <td>
             ## XXX style me
-            <ul>
+            <ul class="cell-list">
                 % for ability in pokemon.abilities:
                 <li>${ability_link(ability)}</li>
                 % endfor
                 % if pokemon.hidden_ability:
-                <li>${ability_link(pokemon.hidden_ability)}</li>
+                <li class="hidden-ability">${ability_link(pokemon.hidden_ability)}</li>
                 % endif
             </ul>
         </td>
@@ -185,7 +185,7 @@
 
         <td>
             ## XXX share some styling with the ability list
-            <ul>
+            <ul class="cell-list">
                 % for egg_group in pokemon.species.egg_groups:
                 <li>${egg_group.name}</li>
                 % endfor
