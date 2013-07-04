@@ -146,13 +146,13 @@
     <th>${_(u"Abilities")}</th>
     <th>${_(u"Gender")}</th>
     <th>${_(u"Egg groups")}</th>
-    <th>HP</th>
-    <th>Atk</th>
-    <th>Def</th>
-    <th>SpA</th>
-    <th>SpD</th>
-    <th>Spe</th>
-    <th>Total</th>
+    <th>${_(u"HP")}</th>
+    <th>${_(u"Atk")}</th>
+    <th>${_(u"Def")}</th>
+    <th>${_(u"SpA")}</th>
+    <th>${_(u"SpD")}</th>
+    <th>${_(u"Spe")}</th>
+    <th>${_(u"Total")}</th>
 </%def>
 
 <%def name="pokemon_table_row(pokemon)">
