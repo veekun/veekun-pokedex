@@ -293,9 +293,14 @@ class Query(object):
             q = (
                 q
                 .join(t.Pokemon.species)
+                .options(contains_eager(t.Pokemon.species))
                 .options(subqueryload(t.Pokemon.pokemon_abilities))
                 .options(joinedload(t.Pokemon.pokemon_abilities, t.PokemonAbility.ability))
-                .options(joinedload(t.Pokemon.stats))
+                .options(joinedload(t.Pokemon.types))
+                .options(joinedload(t.Pokemon.default_form))
+                .options(joinedload(t.Pokemon.species, t.PokemonSpecies.names_local))
+                .options(joinedload(t.Pokemon.default_form, t.PokemonForm.names_local))
+                .options(subqueryload(t.Pokemon.forms))
                 .options(subqueryload(t.Pokemon.species, t.PokemonSpecies.parent_species))
                 .options(joinedload(t.Pokemon.species, t.PokemonSpecies.parent_species, t.PokemonSpecies.parent_species))
                 .order_by(t.PokemonSpecies.generation_id.asc(), t.PokemonSpecies.evolution_chain_id.asc(), t.PokemonSpecies.id.asc())
