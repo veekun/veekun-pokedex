@@ -17,6 +17,8 @@ log = logging.getLogger(__name__)
 
 
 class Datum(object):
+    supports_grouping = False
+
     def __init__(self, *path, **kwargs):
         self.join = path[:-1]
         self.column = path[-1]
@@ -32,7 +34,9 @@ class HasOneDatum(Datum):
         if instance is None:
             return self
 
-        obj = instance._obj
+        return self.get_from_row(instance._obj)
+
+    def get_from_row(self, obj):
         for rel in self.join:
             obj = rel.__get__(obj, type(obj))
 
@@ -64,6 +68,12 @@ class HasOneDatum(Datum):
         for row in session.query(self.target_locus):
             yield self.identified_by.__get__(row, type(row)), row
 
+    supports_grouping = True
+
+    def group_key(self, row):
+        value = self.get_from_row(row)
+        return [value]
+
 class IdentifierDatum(HasOneDatum):
     pass
     # TODO this needs to be a bit different since it's not one-of-fixed-set
@@ -73,7 +83,9 @@ class HasManyDatum(Datum):
         if instance is None:
             return self
 
-        obj = instance._obj
+        return self.get_from_row(instance._obj)
+
+    def get_from_row(self, obj):
         for rel in self.join:
             obj = rel.__get__(obj, type(obj))
 
@@ -89,6 +101,12 @@ class HasManyDatum(Datum):
         return q.filter(
             self.column.any(self.identified_by.in_(values))
         )
+
+    supports_grouping = True
+
+    def group_key(self, row):
+        value = self.get_from_row(row)
+        return value
 
 
 
@@ -223,10 +241,21 @@ class Query(object):
         # url ui thing
         if 'browse' in criteria:
             # XXX this isn't really right at all.
-            # XXX what if there's more than one.  or fewer than one.
-            self.grouper, = criteria.pop('browse')
+            try:
+                grouper_field, = criteria.pop('browse')
+            except ValueError:
+                raise ValueError("Too many values for 'browse'")
         else:
-            self.grouper = 'generation'
+            grouper_field = 'generation'
+
+        try:
+            self.grouper = getattr(self.locus_cls, grouper_field)
+        except (AttributeError, ValueError):
+            # TODO oops i don't know how error handling works
+            raise ValueError("Can't browse by nonexistent field {0!r}".format(grouper_field))
+
+        if not self.grouper.supports_grouping:
+            raise ValueError("Field {0!r} doesn't support browsing".format(grouper_field))
 
         ## FILTERING
 
@@ -314,39 +343,6 @@ class Query(object):
 
         return Results(self.locus_cls, q.all(), self.grouper)
 
-        groups = []
-        grouped_rows = dict()
-        previews = dict()
-        all_rows = []
-
-        for row in q:
-            # XXX ugh
-            if self.grouper == 'generation':
-                tmp = self.locus_cls(row)
-                keys = [tmp.generation]
-            elif self.grouper == 'type':
-                keys = row.types
-
-
-            else:
-                keys = []
-
-            all_rows.append(row)
-
-
-            for key in keys:
-                if key not in grouped_rows:
-                    groups.append(key)
-                    grouped_rows[key] = []
-                    previews[key] = []
-
-                #if len(previews[key]) < 3 and row.species.evolves_from_species_id is None and not row.species.is_baby:
-                #    previews[key].append(row)
-
-                grouped_rows[key].append(row)
-
-        return groups, grouped_rows, previews
-
 
 class Results(object):
     # TODO should support multiple output formats for methods, i think, via a
@@ -366,17 +362,10 @@ class Results(object):
 
     def _post_init_group_rows(self, rows, grouper):
         grouped_rows = {}
+        group_key = grouper.group_key
 
         for row in rows:
-            # XXX ugh this should be part of the locus definition
-            if grouper == 'generation':
-                tmp = self.locus_cls(row)
-                keys = [tmp.generation]
-            elif grouper == 'type':
-                keys = row.types
-            else:
-                # XXX
-                keys = []
+            keys = group_key(row)
 
             for key in keys:
                 grouped_rows.setdefault(key, []).append(row)
