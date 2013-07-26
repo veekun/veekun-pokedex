@@ -196,6 +196,11 @@ dl.panel-stats {
     }
 }
 
+ul.pokemon-mini-panels {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
 ul.pokemon-mini-panels li {
     display: inline-block;
 
@@ -434,6 +439,31 @@ xxx.browse-filter-criterion {
 
 ////// TABLES
 table.table-pretty {
+    // Very similar to archetype's .table
+    @include box-sizing(border-box);
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    th,
+    td {
+        padding: 0.5em;
+    }
+
+    > tbody, > thead, > tfoot {
+        tr {
+            border-top: 1px solid $border-color;
+        }
+
+        &:first-child tr:first-child {
+            border-top: none;
+        }
+    }
+
+    th {
+        font-weight: normal;
+    }
+
     // TODO this doesn't do nested tables very well, but >tbody breaks thead
     tr {
         border-bottom: 1px solid hsl(0, 0%, 93%);
@@ -497,15 +527,20 @@ details.xxx-search-groups {
     > summary {
         position: relative;
         display: block;
-        font-size: 2em;
+        font-size: 1.33em;
         padding: 0.4em;
         background: #f4f4f4;
 
         // TODO put elsewhere
         ul.browse-examples {
+            overflow: hidden;
             position: absolute;
+            top: 0;
             bottom: 0;
             right: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
 
             li {
                 display: inline-block;
@@ -750,8 +785,8 @@ table.pokemon-encounter-table {
     h4 {
         position: relative;
         z-index: 1;
-        //color: hsl(36, 20%, 48%);
         color: black;
+        font-weight: normal;
         text-shadow:
             1px 1px  1px white,
             1px -1px  1px white,

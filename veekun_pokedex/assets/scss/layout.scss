@@ -62,6 +62,10 @@ body {
     );
 
     > ul.menubar {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
         li {
             display: inline-block;
             position: relative;
@@ -121,6 +125,9 @@ body {
         top: 0;
         right: 4em;
         height: 48px;  // same height as container
+        margin: 0;
+        padding: 0;
+        list-style: none;
 
         > li {
             display: inline-block;
@@ -226,12 +233,18 @@ body {
     padding: 0.33em 2em;
     overflow-y: hidden;  // for cropped icons
 
-    li {
-        display: inline-block;
+    ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
 
-        & + li:before {
-            content: " » ";
-            padding: 0 0.33em;
+        li {
+            display: inline-block;
+
+            & + li:before {
+                content: " » ";
+                padding: 0 0.33em;
+            }
         }
     }
 

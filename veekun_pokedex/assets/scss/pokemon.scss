@@ -69,6 +69,10 @@ table.pokemon-evolution-chart {
         margin: 0;
     }
     ul.-method {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
         // This avoids text on top of /most of/ the portraits, without wrapping
         // too hard on smaller screens
         margin-right: 48px;
