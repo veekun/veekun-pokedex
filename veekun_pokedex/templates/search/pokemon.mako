@@ -38,7 +38,7 @@
             <% group_pokemon = results.rows_in_group(group) %>
             <details class="xxx-search-groups">
                 <summary>
-                    <a href="XXX"><!-- ▾ --> ▸ ${group.name}</a> ×${len(group_pokemon)}
+                    <a href="XXX">${group.name}</a> ×${len(group_pokemon)}
                     <ul class="browse-examples">
                         % for preview_pokemon in results.previews_for_group(group):
                         <li><div class="eyeball-crop">${lib.pokemon_sprite(preview_pokemon.species)}</div></li>
@@ -96,21 +96,21 @@ ${search_form()}
 
     <div class="columns">
         <section class="col4">
-        <details hidden>
+        <details>
             <summary>General</summary>
 
         </details>
         </section>
 
         <section class="col4">
-        <details hidden class="col4">
+        <details class="col4">
             <summary>Type</summary>
 
         </details>
         </section>
 
         <section class="col4">
-        <details hidden class="col4">
+        <details class="col4">
             <summary>Evolution</summary>
 
             <p>Stage: [ ] baby  [ ] basic  [ ] stage 1  [ ] stage 2</p>
@@ -126,7 +126,7 @@ ${search_form()}
 
     <div class="columns">
         <section class="col4">
-        <details hidden>
+        <details>
             <summary>Generation</summary>
 
             <p>First introduced in:</p>
@@ -138,7 +138,7 @@ ${search_form()}
         </section>
 
         <section class="col4">
-        <details hidden class="col4">
+        <details class="col4">
             <summary>Regional Pokédex</summary>
             <ul>
                 <li>[ ] kanto</li>
@@ -147,7 +147,7 @@ ${search_form()}
         </section>
 
         <section class="col4">
-        <details hidden class="col4">
+        <details class="col4">
             <summary>Flavor</summary>
 
             <p>genus</p>
@@ -157,21 +157,6 @@ ${search_form()}
         </details>
         </section>
     </div>
-
-    <style>
-        details {
-            border: 1px solid #ececec;
-        }
-        details summary {
-            display: block;
-            padding: 0.5em;
-            background: #f0f0f0;
-        }
-        details summary:before {
-            content: "▸ ";
-            content: "▾ ";
-        }
-        </style>
 
     <dl class="horizontal">
         <dt>Sort by</dt>
@@ -184,10 +169,18 @@ ${search_form()}
         <dd>( ) Nothing  ( ) Generation</dd>
 
         <dt>Show as</dt>
-        <dd>( ) </dd>
+        <dd>
+            <ul>
+                <li><input type="radio"> Small panels</li>
+            </ul>
+        </dd>
 
         <dt>Special options</dt>
         <dd>( ) </dd>
+
+        <dd>
+            <button type="submit" class="btn btn-submit">Search</button>
+        </dd>
     </dl>
 </section>
 </%def>

@@ -432,6 +432,10 @@ xxx.browse-filter-criterion {
     background: hsl(0%, 0%, 93%);
     border: 1px solid hsl(0%, 0%, 90%);
 }
+.browse-filter-options {
+    margin: 0;
+    padding: 0;
+}
 .browse-filter-options > li {
     display: inline-block;
 }
@@ -522,14 +526,12 @@ col.-version {
 ////// DETAILS
 details.xxx-search-groups {
     margin: 0.5em 0;
-    border: 1px solid #ececec;
 
     > summary {
         position: relative;
         display: block;
         font-size: 1.33em;
         padding: 0.4em;
-        background: #f4f4f4;
 
         // TODO put elsewhere
         ul.browse-examples {
