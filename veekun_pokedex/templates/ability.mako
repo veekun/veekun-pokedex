@@ -57,7 +57,7 @@
             </tr>
 
             <tr class="subheader">
-                <th colspan="13">~~~ ${method} ~~~</th>
+                <th colspan="12">~~~ ${method} ~~~</th>
             </tr>
 
             % for p in pokemon:

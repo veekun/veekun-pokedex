@@ -509,6 +509,35 @@ table.table-pretty {
             border-bottom: 1px solid hsl(36, 30%, 75%);
         }
     }
+
+    .td-absolute-root {
+        overflow: hidden;
+        padding: 0;
+
+        > .td-absolute-wrapper {
+            min-height: 24px !important;
+            -moz-box-sizing: border-box;
+            padding: 0 !important;
+        }
+        .cell-sprite-peek {
+            position: absolute;
+            height: 48px;
+            width: 80px;
+            right: 0;
+            top: 0;
+
+            img {
+                margin: -24px -16px -24px 0;
+                opacity: 0.6;
+                @include transition(opacity linear 0.2s);
+            }
+        }
+    }
+    tr:hover {
+        .cell-sprite-peek img {
+            opacity: 1;
+        }
+    }
 }
 table.table-pretty.table-striped-bodies {
 
@@ -736,20 +765,6 @@ table.encounter-strip {
         border-top: 2px solid hsl(0, 40%, 80%);
     }
 
-    td {
-        > .td-absolute-wrapper {
-            min-height: 24px !important;
-            -moz-box-sizing: border-box;
-            padding: 0 !important;
-        }
-    }
-    .-sprite-wrapper {
-        height: 24px !important;
-
-        img {
-            margin: -32px -16px -40px 0 !important;
-        }
-    }
     p {
         margin: 0;
         font-size: 0.8em !important;
@@ -779,24 +794,12 @@ table.pokemon-encounter-table {
         > .td-absolute-wrapper {
             padding: 0.33em;
         }
-        .cell-sprite-peek {
-            position: absolute;
-            height: 48px;
-            width: 80px;
-            right: 0;
-            top: 0;
-
-            img {
-                margin: -24px -16px -24px 0;
-                opacity: 0.6;
-                @include transition(opacity linear 0.2s);
-            }
-        }
     }
 
     h4 {
         position: relative;
         z-index: 1;
+        margin: 0;
         color: black;
         font-weight: normal;
         text-shadow:
@@ -829,11 +832,5 @@ table.pokemon-encounter-table {
         line-height: 133%;
         vertical-align: middle;
         color: hsl(36, 0%, 60%);
-    }
-
-    tr:hover {
-        .cell-sprite-peek img {
-            opacity: 1;
-        }
     }
 }

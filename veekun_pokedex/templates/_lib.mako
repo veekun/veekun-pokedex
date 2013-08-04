@@ -141,7 +141,7 @@
 </%def>
 
 <%def name="pokemon_table_headers()">
-    <th colspan="2">${_(u"Pokémon")}</th>
+    <th>${_(u"Pokémon")}</th>
     <th>${_(u"Type")}</th>
     <th>${_(u"Abilities")}</th>
     <th>${_(u"Gender")}</th>
@@ -157,9 +157,12 @@
 
 <%def name="pokemon_table_row(pokemon)">
     <tr>
-        <td><span class="icon-eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/icons/${pokemon.species.id}.png"></span></td>
-
-        <td><a href="${request.resource_url(pokemon)}">${pokemon.name}</a></td>
+        <td class="td-absolute-root">
+            <div class="td-absolute-wrapper">
+            <a href="${request.resource_url(pokemon)}">${pokemon.name}</a>
+            <div class="cell-sprite-peek"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.species.id}.png"></div>
+            </div>
+        </td>
 
         <td>
             % for type_ in pokemon.types:

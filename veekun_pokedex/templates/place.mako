@@ -33,7 +33,7 @@
         % for (pokemon, condition_values), pokemon_encounters in method_encounters.partition_by_pokemon_condition_values():
         <% version_encounters = dict(pokemon_encounters.partition_by_version()) %>
         <tr>
-            <th class="encounter-pokemon">
+            <th class="encounter-pokemon td-absolute-root">
                 <div class="td-absolute-wrapper">
                 <a href="${request.resource_url(pokemon)}">${pokemon.name}</a>
                 <div class="cell-sprite-peek"><img src="http://veekun.com/dex/media/pokemon/main-sprites/black-white/${pokemon.species.id}.png"></div>
