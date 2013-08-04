@@ -1,6 +1,6 @@
 #encoding: utf8
 from pyramid.view import view_config
-from sqlalchemy.orm import eagerload
+from sqlalchemy.orm import contains_eager, eagerload
 
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
@@ -13,8 +13,11 @@ from veekun_pokedex.resource import AbilityIndex
 def ability_browse(context, request):
     abilities = (
         session.query(t.Ability)
+        .join(t.Ability.names_local)
+        .order_by(t.Ability.names_table.name.asc())
         .options(
             eagerload(t.Ability.prose_local),
+            contains_eager(t.Ability.names_local),
         )
     )
 
