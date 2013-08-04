@@ -1,5 +1,6 @@
 #encoding: utf8
 from pyramid.view import view_config
+from sqlalchemy.orm import eagerload
 
 import pokedex.db.tables as t
 from veekun_pokedex.model import session
@@ -10,7 +11,12 @@ from veekun_pokedex.resource import AbilityIndex
     context=AbilityIndex,
     renderer='/browse/abilities.mako')
 def ability_browse(context, request):
-    abilities = session.query(t.Ability)
+    abilities = (
+        session.query(t.Ability)
+        .options(
+            eagerload(t.Ability.prose_local),
+        )
+    )
 
     template_ns = dict(
         abilities=abilities,
