@@ -140,6 +140,65 @@
     </dl>
 </%def>
 
+<%def name="pokemon_table_headers()">
+    <th colspan="2">${_(u"Pokémon")}</th>
+    <th>${_(u"Type")}</th>
+    <th>${_(u"Abilities")}</th>
+    <th>${_(u"Gender")}</th>
+    <th>${_(u"Egg groups")}</th>
+    <th>${_(u"HP")}</th>
+    <th>${_(u"Atk")}</th>
+    <th>${_(u"Def")}</th>
+    <th>${_(u"SpA")}</th>
+    <th>${_(u"SpD")}</th>
+    <th>${_(u"Spe")}</th>
+    <th>${_(u"Total")}</th>
+</%def>
+
+<%def name="pokemon_table_row(pokemon)">
+    <tr>
+        <td><span class="icon-eyeball-crop"><img src="http://veekun.com/dex/media/pokemon/icons/${pokemon.species.id}.png"></span></td>
+
+        <td><a href="${request.resource_url(pokemon)}">${pokemon.name}</a></td>
+
+        <td>
+            % for type_ in pokemon.types:
+            ${type_icon(type_)}
+            % endfor
+        </td>
+
+        <td>
+            ## XXX style me
+            <ul class="cell-list">
+                % for ability in pokemon.abilities:
+                <li>${ability_link(ability)}</li>
+                % endfor
+                % if pokemon.hidden_ability:
+                <li class="hidden-ability">${ability_link(pokemon.hidden_ability)}</li>
+                % endif
+            </ul>
+        </td>
+
+        <td>
+            gender
+        </td>
+
+        <td>
+            ## XXX share some styling with the ability list
+            <ul class="cell-list">
+                % for egg_group in pokemon.species.egg_groups:
+                <li>${egg_group.name}</li>
+                % endfor
+            </ul>
+        </td>
+
+        % for stat in pokemon.stats:
+        <td>${stat.base_stat}</td>
+        % endfor
+
+        <td>${sum(stat.base_stat for stat in pokemon.stats)}</td>
+    </tr>
+</%def>
 
 ################################################################################
 ## Misc UI-y stuff

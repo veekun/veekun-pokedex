@@ -13,6 +13,7 @@ from veekun_pokedex.resource import AbilityIndex
 def ability_browse(context, request):
     abilities = (
         session.query(t.Ability)
+        .filter_by(is_main_series=True)
         .join(t.Ability.names_local)
         .order_by(t.Ability.names_table.name.asc())
         .options(

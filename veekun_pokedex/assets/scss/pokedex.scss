@@ -57,6 +57,16 @@
     background: hsl(225, 30%, 90%);
 }
 
+.hidden-ability {
+    font-style: italic;
+}
+
+ul.cell-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.75em;
+}
 
 ////// PANELS
 ul.pokemon-panels li {
