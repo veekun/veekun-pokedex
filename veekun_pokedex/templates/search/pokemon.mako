@@ -13,16 +13,23 @@
         <div class="name">Explore Pokémon</div>
     </div>
 </nav>
+% if did_search:
+<nav id="breadcrumbs">
+    <ol>
+        <li><a href="${request.path_url}">Explore</a></li>
+        ## XXX this could stand to be more specific
+        <li>Results</li>
+    </ol>
+</nav>
+% endif
 </%block>
 
 ################################################################################
 ## ACTUAL PAGE CONTENTS (all the rest is defs)
 
 % if did_search:
-    ## XXX style
-    ← Start over
-
     <section>
+        ## XXX this could stand to be more specific
         <h1>Results</h1>
         <p>Found ${len(results)} Pokémon.</p>
         ## TODO: could put so so so much more here
@@ -94,6 +101,7 @@ ${search_form()}
 <section>
     <h1>Custom</h1>
 
+    <% from veekun_pokedex.api import PokemonLocus %>
     <div class="columns">
         <section class="col4">
         <details>
@@ -106,6 +114,9 @@ ${search_form()}
         <details class="col4">
             <summary>Type</summary>
 
+            <%libsearch:field_select_several datum="${PokemonLocus.type}" args="type">
+                ${lib.type_icon(type)}
+            </%libsearch:field_select_several>
         </details>
         </section>
 
@@ -130,9 +141,10 @@ ${search_form()}
             <summary>Generation</summary>
 
             <p>First introduced in:</p>
-            <ul>
-                <li>[ ] gen 1</li>
-            </ul>
+            ## TODO i don't much like that this takes over the <ul> and <li> and whatnot for me
+            <%libsearch:field_select_one datum="${PokemonLocus.generation}" args="generation">
+                ${lib.generation_icon(generation)}
+            </%libsearch:field_select_one>
 
         </details>
         </section>

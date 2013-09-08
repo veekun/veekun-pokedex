@@ -6,11 +6,11 @@
 </ul>
 </%def>
 
-<%def name="field_select_several(name, values)">
+<%def name="field_select_several(datum)">
 <ul class="browse-filter-options">
-    % for identifier, obj in values:
-    <li><label class="browse-pill"><input type="checkbox" name="${name}" value="${identifier}"
-        % if identifier in request.GET.getall(name):
+    % for identifier, obj in datum.iter_options():
+    <li><label class="browse-pill"><input type="checkbox" name="${datum.key}" value="${identifier}"
+        % if identifier in request.GET.getall(datum.key):
         checked="checked"
         % endif
         ><span>${caller.body(obj)}</span>

@@ -1,6 +1,7 @@
 ### TODO: move this to pokedex.git once it's stable and sensible
 
 import logging
+from operator import attrgetter
 
 from sqlalchemy.orm import contains_eager, joinedload, lazyload, noload, subqueryload
 
@@ -101,6 +102,22 @@ class HasManyDatum(Datum):
         return q.filter(
             self.column.any(self.identified_by.in_(values))
         )
+
+    ### Inspection
+    # TODO i am too copy/pasted from HasOne
+
+    @property
+    def target_locus(self):
+        return self.column.property.mapper.class_
+
+    def iter_options(self):
+        # XXX
+        from veekun_pokedex.model import session
+        # TODO need to filter this
+        # TODO need to order this?
+        for row in session.query(self.target_locus):
+            yield self.identified_by.__get__(row, type(row)), row
+
 
     supports_grouping = True
 
@@ -358,7 +375,8 @@ class Results(object):
         # TODO wait should i, like, actually instantiate PokemonLocus objects,
         # or are they classes pretending to be objects, or what is happening
 
-        self.grouped_rows = self._post_init_group_rows(rows, grouper)
+        if grouper:
+            self.grouped_rows = self._post_init_group_rows(rows, grouper)
 
     def _post_init_group_rows(self, rows, grouper):
         grouped_rows = {}
@@ -380,7 +398,7 @@ class Results(object):
 
     @property
     def groups(self):
-        return sorted(self.grouped_rows.keys())
+        return sorted(self.grouped_rows.keys(), key=attrgetter('id'))
 
     def rows_in_group(self, group):
         return self.grouped_rows[group]
