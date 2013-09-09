@@ -161,6 +161,11 @@ class MoveLocus(Locus):
         t.Move.identifier,
     )
 
+    # TODO hold up chief i need to think about this
+    #name = WildcardDatum(
+    #    t.Move.names_local,
+    #)
+
     generation = HasOneDatum(
         t.Move.generation,
         identified_by=t.Generation.id,
