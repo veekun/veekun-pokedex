@@ -60,4 +60,9 @@ def main(global_config, **settings):
     config.add_route('api-search-test', '/api/pokemon/search')
     config.add_route('move-search', '/en/moves')
 
+    config.add_route('tools.tournament', '/tools/tournament')
+    config.add_route('tools.compare', '/tools/compare')
+    config.add_route('tools.pokeballs', '/tools/pokeballs')
+    config.add_route('tools.stats', '/tools/stats')
+
     return config.make_wsgi_app()
