@@ -42,9 +42,9 @@
     <h1>Tools</h1>
 
     <ul class="large-tiles large-tiles-wider">
-        <li><a href="/tools/compare"><img src="http://veekun.com/dex/media/items/silph-scope.png"> Compare Pokémon</a></li>
-        <li><a href="/tools/pokeballs"><img src="http://veekun.com/dex/media/items/master-ball.png"> Pokéball performance</a></li>
-        <li><a href="/tools/stats"><img src="http://veekun.com/dex/media/items/scanner.png"> Stat calculator</a></li>
+        <li><a href="${request.route_url('tools.compare')}"><img src="http://veekun.com/dex/media/items/silph-scope.png"> Compare Pokémon</a></li>
+        <li><a href="${request.route_url('tools.pokeballs')}"><img src="http://veekun.com/dex/media/items/master-ball.png"> Pokéball performance</a></li>
+        <li><a href="${request.route_url('tools.stats')}"><img src="http://veekun.com/dex/media/items/scanner.png"> Stat calculator</a></li>
         <li><a href="/downloads"><img src="http://veekun.com/dex/media/items/up-grade.png"> Downloads</a></li>
     </ul>
 </section>
