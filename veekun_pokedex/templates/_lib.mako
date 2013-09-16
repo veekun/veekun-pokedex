@@ -56,7 +56,9 @@
 
 ## Use me to get a generation icon without a real Generation object
 <%def name="generation_icon_by_id(generation_id)">
-<span class="version-gen${generation_id}">Gen ${generation_id}</span>
+##<span class="version-gen${generation_id}">Gen ${generation_id}</span>
+<span class="version-gen${generation_id}">${u'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ'[generation_id - 1]}</span>
+
 </%def>
 
 <%def name="any_version_icon(obj)"><%

@@ -538,6 +538,13 @@ table.table-pretty {
             opacity: 1;
         }
     }
+
+    // TODO maybe need a move class, or a dex table class
+    td.-version {
+        text-align: center;
+        padding-left: 0.25em;
+        padding-right: 0.25em;
+    }
 }
 table.table-pretty.table-striped-bodies {
 
@@ -557,8 +564,15 @@ table.table-pretty.table-striped-bodies {
 
 }
 
-col.-version {
-    width: 4em;
+th.-version {
+    width: 1em;
+}
+colgroup.-version-group {
+    border-right: 1px dashed hsl(36, 30%, 75%);
+
+    &:last-of-type {
+        border-right-style: solid;
+    }
 }
 
 

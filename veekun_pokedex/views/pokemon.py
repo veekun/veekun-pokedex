@@ -1,5 +1,6 @@
 #encoding: utf8
 from collections import defaultdict
+from collections import namedtuple
 import operator
 
 from sqlalchemy import func
@@ -17,29 +18,95 @@ def _countif(expr):
     return func.sum(case({expr: 1}, else_=0))
 
 
+ColumnHeader = namedtuple('ColumnHeader', ['label', 'span', 'key'])
+
+
+class defaultdictkey(defaultdict):
+    """defaultdict subclass that passes the key to the default_factory."""
+    def __missing__(self, key):
+        if self.default_factory is None:
+            raise KeyError(key)
+
+        value = self.default_factory(key)
+        self[key] = value
+        return value
+
+
+class CollapsibleVersionGroupColumn(object):
+    def __init__(self, group):
+        self.group = group
+        self.versions = group.versions
+        self.possible_key = None
+        self.pending_rows = {}
+        self.uncollapsible = False
+
+    def consider(self, version, row_key, value):
+        # TODO docs blah blah
+        if self.possible_key is None:
+            self.possible_key = version
+
+        if len(self.versions) == 1:
+            # A version group with only one version (e.g., Platinum) can always
+            # collapse
+            return
+
+        if self.uncollapsible:
+            # More data won't change this
+            return
+
+        if row_key not in self.pending_rows:
+            # First time we've seen this value, and there are at least two
+            # versions, so this is definitely pending
+            self.pending_rows[row_key] = (value, len(self.versions) - 1)
+            return
+
+        existing_value, versions_left = self.pending_rows[row_key]
+
+        if existing_value != value:
+            # Conflict; this column group will never collapse
+            self.uncollapsible = True
+            self.pending_rows.clear()
+        elif versions_left <= 1:
+            # Last version, and the value matches!  Forget about the pending
+            # row
+            del self.pending_rows[row_key]
+        else:
+            # Decrement the version count and continue on
+            self.pending_rows[row_key] = value, versions_left - 1
+
+    @property
+    def can_collapse(self):
+        if self.uncollapsible:
+            return False
+        elif self.pending_rows:
+            return False
+        else:
+            return True
+
+    @property
+    def column_header(self):
+       return ColumnHeader(label=self.group, span=len(self.versions), key=self.possible_key)
+
+
 class CollapsibleVersionTable(object):
     """I represent a table where the columns are versions.  Stick data in
     me, and I'll look for duplicate columns and collapse them.
 
     I kind of suck!  I wish I sucked less.
     """
-    _baked = False
-
     def __init__(self):
         # version => { key => value }
         self._column_data = {}
-        self._column_spans = defaultdict(lambda: 1)  # TODO
         self._row_order = []
         self._row_index = set()
         self._seen_generations = set()
-        self._seen_version_groups = set()
         self._seen_versions = set()
-
-    @property
-    def generations(self):
-        return sorted(self._seen_generations, key=operator.attrgetter('id'))
+        self._column_groups = defaultdictkey(CollapsibleVersionGroupColumn)
 
     def add_version_datum(self, version, row_key, value):
+        # TODO defaulting to None is busted if there's no data -- even better
+        # reason to add another level of container imo
+        print version, row_key, value
         if value is None:
             raise TypeError("Can't store None; it's already a special value")
 
@@ -50,8 +117,12 @@ class CollapsibleVersionTable(object):
         # Finally, some bookkeeping
         version_group = version.version_group
         generation = version_group.generation
+
+        # Update collapsibility
+        for group in (version_group, generation):
+            self._column_groups[group].consider(version, row_key, value)
+
         self._seen_versions.add(version)
-        self._seen_version_groups.add(version_group)
         self._seen_generations.add(generation)
         if row_key not in self._row_index:
             self._row_order.append(row_key)
@@ -62,141 +133,104 @@ class CollapsibleVersionTable(object):
         for version in version_group.versions:
             self.add_version_datum(version, row_key, value)
 
-    def bake(self):
-        self._baked = True
-
-        self._columns = []
-        collapsible = dict()
-
-        self._represented = set()
-
-        def can_collapse(keys):
-            if not all(key in self._column_data for key in keys):
-                # Some (or all) of the keys are missing from the column data,
-                # so no
-                # TODO is that correct...?
-                return False
-
-            if len(keys) <= 1:
-                # There's only one sub-key, so it can /always/ collapse
-                return True
-
-            reference = self._column_data[keys[0]]
-            return all(
-                self._column_data[key] == reference
-                for key in keys[1:])
-
-        for generation in self.generations:
-            generation_columns = []
-            generation_collapsible = True
-
-            for version_group in generation.version_groups:
-                versions = version_group.versions
-                if can_collapse(versions):
-                    # Group can collapse, cool
-                    canon = self._column_data[versions[0]]
-                    self._column_data[version_group] = canon
-                    for version in versions[1:]:
-                        self._column_data[version] = canon
-
-                    collapsible[version_group] = True
-                    generation_columns.append(version_group)
-                else:
-                    collapsible[version_group] = False
-                    generation_columns.extend(
-                        version for version in versions
-                        if version in self._column_data)
-                    generation_collapsible = False
-
-            if generation_collapsible and can_collapse(generation.version_groups):
-                # Entire generation can collapse, double cool
-                self._column_data[generation] = canon  # TODO
-
-                self._columns.append(generation)
-            else:
-                self._columns.extend(generation_columns)
-
-    @classmethod
-    def align(cls, instances):
-        new_columns = dict()
-        all_generations = set()
-        all_version_groups = set()
-        all_versions = set()
-        for instance in instances:
-            assert instance._baked
-            all_generations |= instance._seen_generations
-            all_version_groups |= instance._seen_version_groups
-            all_versions |= instance._seen_versions
-            new_columns[instance] = []
-
-        column_spans = dict()
-        for version in all_versions:
-            column_spans[version] = 1
-        for version_group in all_version_groups:
-            column_spans[version_group] = sum(
-                column_spans[version]
-                for version in version_group.versions)
-        for generation in all_generations:
-            column_spans[generation] = sum(
-                column_spans[version_group]
-                for version_group in generation.version_groups)
-
-        generations = list(sorted(all_generations, key=operator.attrgetter('id')))
-
-        for instance in instances:
-            instance._column_spans = column_spans
-
-            for generation in generations:
-                # If it's already a combined column, use it
-                if generation in instance._column_data:
-                    new_columns[instance].append(generation)
-                # If this generation doesn't appear at all, add an empty column
-                elif generation not in instance._seen_generations:
-                    instance._column_data[generation] = {}
-                    new_columns[instance].append(generation)
-                else:
-                    for version_group in generation.version_groups:
-                        if version_group not in all_version_groups:
-                            continue
-                        elif version_group in instance._column_data:
-                            new_columns[instance].append(version_group)
-                        elif version_group not in instance._seen_version_groups:
-                            # Version group doesn't appear anywhere; add an empty column
-                            instance._column_data[generation] = {}
-                            new_columns[instance].append(version_group)
-                        else:
-                            for version in version_group.versions:
-                                if version not in all_versions:
-                                    continue
-                                elif version in instance._column_data:
-                                    new_columns[instance].append(version)
-                                elif version not in instance._seen_versions:
-                                    # Version doesn't appear anywhere; add an empty column
-                                    instance._column_data[version] = {}
-                                    new_columns[instance].append(version)
-
-
-        for instance in instances:
-            instance._columns = new_columns[instance]
-
-    # TODO not liking how the spans are working here
-
     @property
     def column_headers(self):
-        return (
-            (column, self._column_spans[column])
-            for column in self._columns
-        )
+        return self._column_headers(self.generations, self._seen_versions)
+
+    def _column_headers(self, generations, seen):
+        groups = self._column_groups
+        for gen in generations:
+            if groups[gen].can_collapse:
+                yield groups[gen].column_header
+                continue
+
+            for vg in gen.version_groups:
+                if groups[vg].can_collapse:
+                    yield groups[vg].column_header
+                    continue
+
+                for version in vg.versions:
+                    if version in seen:
+                        yield ColumnHeader(label=version, span=1, key=version)
 
     @property
     def rows(self):
+        return self._rows(self.column_headers)
+
+    def _rows(self, headers):
+        headers = list(headers)  # evaluate generators
         for row_key in self._row_order:
-            class Foo(list): pass
-            row = Foo()
-            for column in self._columns:
-                row.append((self._column_data.get(column, {}).get(row_key), self._column_spans[column]))
-            row.key = row_key
-            yield row
+            row = []
+            for header in headers:
+                row.append((
+                    self._column_data.get(header.key, {}).get(row_key),
+                    header.span))
+            yield row_key, row
+
+    @property
+    def generations(self):
+        return sorted(self._seen_generations, key=operator.attrgetter('id'))
+
+    @property
+    def generation_spans(self):
+        # TODO this seems reeeeally specific
+        for generation in self.generations:
+            yield len(set(generation.versions) & self._seen_versions)
+
+
+class SectionedCollapsibleVersionTable(object):
+    def __init__(self):
+        self._seen_versions = set()
+        self._seen_generations = set()
+        self._column_groups = defaultdictkey(CollapsibleVersionGroupColumn)
+        self._section_tables = dict()
+        self.sections = []
+
+    def _table_for_section(self, section):
+        if section not in self._section_tables:
+            self._section_tables[section] = CollapsibleVersionTable()
+            self.sections.append(section)
+
+        return self._section_tables[section]
+
+    def add_version_datum(self, section, version, row_key, value):
+        table = self._table_for_section(section)
+        table.add_version_datum(version, row_key, value)
+
+        self._seen_versions.add(version)
+        self._seen_generations.add(version.generation)
+
+        # Update collapsibility for the entire table
+        version_group = version.version_group
+        generation = version_group.generation
+        for group in (version_group, generation):
+            self._column_groups[group].consider(version, row_key, value)
+
+    def add_group_datum(self, section, version_group, row_key, value):
+        for version in version_group.versions:
+            self.add_version_datum(section, version, row_key, value)
+
+    def sort_sections(self, key):
+        self.sections.sort(key=key)
+
+    @property
+    def generations(self):
+        return sorted(self._seen_generations, key=operator.attrgetter('id'))
+
+    @property
+    def generation_spans(self):
+        # TODO this seems reeeeally specific
+        for generation in self.generations:
+            yield len(set(generation.versions) & self._seen_versions)
+
+    def column_headers_for(self, section):
+        table = self._section_tables[section]
+        return table._column_headers(self.generations, self._seen_versions)
+
+    def rows_for(self, section):
+        table = self._section_tables[section]
+        return table._rows(self.column_headers_for(section))
+
 
 
 class EvolutionTableCell(object):
@@ -300,6 +334,11 @@ def pokemon(context, request):
         pokemon=default_pokemon,
     )
 
+    # Preload a bunch of stuff we'll always need
+    # TODO share this?
+    for preload_enum_table in (t.Generation, t.VersionGroup, t.Version):
+        session.query(preload_enum_table).all()
+
     ## Type efficacy
     type_efficacies = defaultdict(lambda: 100)
     for target_type in default_pokemon.types:
@@ -363,7 +402,6 @@ def pokemon(context, request):
     item_table = CollapsibleVersionTable()
     for pokemon_item in default_pokemon.items:
         item_table.add_version_datum(pokemon_item.version, pokemon_item.item, pokemon_item.rarity)
-    item_table.bake()
 
     template_ns['wild_held_items'] = item_table
 
@@ -382,22 +420,13 @@ def pokemon(context, request):
             t.PokemonMove.version_group_id.asc(),
         )
 
-    moves_by_method = dict()
+    moves_table = SectionedCollapsibleVersionTable()
     for pokemove in q:
-        if pokemove.method not in moves_by_method:
-            moves_by_method[pokemove.method] = CollapsibleVersionTable()
-
-        moves_by_method[pokemove.method].add_group_datum(
-            pokemove.version_group, pokemove.move, pokemove.level)
-
-    for table in moves_by_method.values():
-        table.bake()
-
-    CollapsibleVersionTable.align(moves_by_method.values())
+        moves_table.add_group_datum(
+            pokemove.method, pokemove.version_group, pokemove.move, pokemove.level)
 
     _method_order = [u'level-up', 'egg', u'tutor', u'stadium-surfing-pikachu', u'machine']
-    template_ns['_pokemon_moves_by_method'] = sorted(
-        moves_by_method.items(),
-        key=lambda kv: _method_order.index(kv[0].identifier))
+    moves_table.sort_sections(lambda method: _method_order.index(method.identifier))
+    template_ns['moves'] = moves_table
 
     return template_ns

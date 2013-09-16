@@ -273,18 +273,18 @@
 
         <table class="table-pretty" style="width: auto;">
         <col>
-        % for column, span in wild_held_items.column_headers:
-        <col span="${span}" class="-version">
+        % for column in wild_held_items.column_headers:
+        <col span="${column.span}" class="-version">
         % endfor
         <tr class="header">
             <th></th>
-            % for column, span in wild_held_items.column_headers:
-            <th colspan="${span}">${lib.any_version_icon(column)}</th>
+            % for column in wild_held_items.column_headers:
+            <th colspan="${column.span}">${lib.any_version_icon(column.label)}</th>
             % endfor
         </tr>
-        % for row in wild_held_items.rows:
+        % for item, row in wild_held_items.rows:
         <tr>
-            <th><a href="${request.resource_url(row.key)}">${lib.item_icon(row.key)} ${row.key.name}</a></th>
+            <th><a href="${request.resource_url(item)}">${lib.item_icon(item)} ${item.name}</a></th>
             ## TODO not quite right...
             % for rarity, span in row:
             <td colspan="${span}">
@@ -458,9 +458,12 @@
         ## XXX whoops this shows every language we've got lol
         <dl class="horizontal">
         % for flavor_text_row in species.flavor_text:
+          ## XXX what is the current language?
+          % if flavor_text_row.language.identifier == 'en':
             ## XXX blah blah better vg icons
-            <dt>${lib.any_version_icon(flavor_text_row.version)}</dt>
+            <dt>${lib.version_name(flavor_text_row.version)}</dt>
             <dd>${flavor_text_row.flavor_text}</dd>
+          % endif
         % endfor
         </dl>
     </section>
@@ -483,24 +486,14 @@
     <h1>${_(u"Moves")}</h1>
 
     <table class="table-pretty">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-        <col class="-version">
-      % for move_method, move_table in _pokemon_moves_by_method:
+      % for span in moves.generation_spans:
+        <colgroup span="${span}" class="-version-group"></colgroup>
+      % endfor
+      % for move_method in moves.sections:
         <tbody>
             <tr class="header">
-              % for column, span in move_table.column_headers:
-                <th colspan="${span}">${lib.any_version_icon(column)}</th>
+              % for column in moves.column_headers_for(move_method):
+                <th colspan="${column.span}" class="-version">${lib.any_version_icon(column.label)}</th>
               % endfor
                 <th>${_(u"Move")}</th>
                 <th>${_(u"Type")}</th>
@@ -515,10 +508,10 @@
                 <th colspan="99">~~~ ${move_method.identifier} ~~~</th>
             </tr>
 
-            % for row in move_table.rows:
+            % for move, row in moves.rows_for(move_method):
             <tr>
               % for level, span in row:
-                <td colspan="${span}">
+                <td colspan="${span}" class="-version">
                     % if level == 0:
                     ✓
                     % elif level is not None:
@@ -526,32 +519,32 @@
                     % endif
                 </td>
               % endfor
-                <td><a href="${request.resource_url(row.key)}">${row.key.name}</a></td>
-                <td>${lib.type_icon(row.key.type)}</td>
-                <td><img src="http://veekun.com/dex/media/damage-classes/${row.key.damage_class.identifier}.png" alt="${row.key.damage_class.name}"></td>
-                <td>${row.key.pp}</td>
+                <td><a href="${request.resource_url(move)}">${move.name}</a></td>
+                <td>${lib.type_icon(move.type)}</td>
+                <td><img src="http://veekun.com/dex/media/damage-classes/${move.damage_class.identifier}.png" alt="${move.damage_class.name}"></td>
+                <td>${move.pp}</td>
                 <td>
-                    % if row.key.power:
-                    ${row.key.power}
+                    % if move.power:
+                    ${move.power}
                     % else:
                     —
                     % endif
                 </td>
                 <td>
-                    % if row.key.accuracy:
-                    ${row.key.accuracy}%
+                    % if move.accuracy:
+                    ${move.accuracy}%
                     % else:
                     —
                     % endif
                 </td>
                 <td>
-                    % if row.key.priority > 0:
-                    ⬆${row.key.priority}
-                    % elif row.key.priority < 0:
-                    ⬇${row.key.priority}
+                    % if move.priority > 0:
+                    ⬆${move.priority}
+                    % elif move.priority < 0:
+                    ⬇${move.priority}
                     % endif
                 </td>
-                <td>${libfmt.render_markdown(row.key, 'short_effect')}</td>
+                <td>${libfmt.render_markdown(move, 'short_effect', inline=True)}</td>
             </tr>
             % endfor
         </tbody>
